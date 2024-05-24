@@ -25,8 +25,25 @@ export class TermueNode {
     }
 
     public addChild<T extends TermueNode>(node: T) {
+        if (node.isChildOf(this)) {
+            return
+        }
+
+        this._children.push(node)
     }
 
     public removeChild<T extends TermueNode>(node: T) {
+        if (!node.isChildOf(this)) {
+            return
+        }
+
+        const removeChildrenIndex = this._children
+            .findIndex((_node) => _node === node)
+
+        this._children.splice(removeChildrenIndex, 1)
+    }
+
+    public isChildOf(maybeParent: TermueNode): boolean {
+        return !!maybeParent._children.find((node) => node === this)
     }
 }
