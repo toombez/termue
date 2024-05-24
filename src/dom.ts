@@ -10,7 +10,7 @@ export type Tag =
 
 export class TermueNode {
     public yogaNode?: YogaNode | null = null
-    private _parent?: TermueNode | null
+    private _parent?: TermueNode | null = null
     private _children: TermueNode[] = []
 
     public get children(): Readonly<typeof this._children> {
@@ -22,6 +22,7 @@ export class TermueNode {
     }
 
     public set parent(node: NonNullable<typeof this._parent>) {
+        node.addChild(this)
     }
 
     public addChild<T extends TermueNode>(node: T) {
@@ -30,6 +31,13 @@ export class TermueNode {
         }
 
         this._children.push(node)
+        node._parent = this
+
+        if (!this.yogaNode || !node.yogaNode) {
+            return
+        }
+
+        this.yogaNode.insertChild(node.yogaNode, this.yogaNode.getChildCount())
     }
 
     public removeChild<T extends TermueNode>(node: T) {
@@ -41,9 +49,20 @@ export class TermueNode {
             .findIndex((_node) => _node === node)
 
         this._children.splice(removeChildrenIndex, 1)
+        node._parent = null
+
+        if (!this.yogaNode || !node.yogaNode) {
+            return
+        }
+
+        this.yogaNode.removeChild(node.yogaNode)
     }
 
     public isChildOf(maybeParent: TermueNode): boolean {
         return !!maybeParent._children.find((node) => node === this)
+    }
+
+    public isParentOf(maybeChild: TermueNode): boolean {
+        return maybeChild.isChildOf(this)
     }
 }
