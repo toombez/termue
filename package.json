@@ -1,0 +1,22 @@
+{
+  "name": "termue",
+  "version": "0.0.0",
+  "description": "Vue.js renderer for terminal",
+  "main": "dist/",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "pnpm run build --watch --on-success=\"node dist/index.js\""
+  },
+  "keywords": ["vue", "terminal"],
+  "license": "MIT",
+  "dependencies": {
+    "tsup": "^8.0.2",
+    "vue": "^3.4.27",
+    "yoga-layout": "^3.0.4"
+  },
+  "devDependencies": {
+    "tsx": "^4.10.5",
+    "typescript": "^5.4.5"
+  }
+}
