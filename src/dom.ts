@@ -8,6 +8,13 @@ export type Tag =
     | 'Box'
     | 'Text'
 
+type TraversalCallback<T> = (node: TermueNode) => T
+
+type TraversalOptions<T, K> = {
+    beforeCb?: TraversalCallback<T>
+    afterCb?: TraversalCallback<K>
+}
+
 export class TermueNode {
     public yogaNode?: YogaNode | null = null
     private _parent?: TermueNode | null = null
@@ -64,6 +71,16 @@ export class TermueNode {
 
     public isParentOf(maybeChild: TermueNode): boolean {
         return maybeChild.isChildOf(this)
+    }
+
+    public static traverseDepth<T, K, N extends TermueNode>(node: N, options?: TraversalOptions<T, K>) {
+        options?.beforeCb?.(node)
+
+        for (let child of node.children) {
+            this.traverseDepth(child, options)
+        }
+
+        options?.afterCb?.(node)
     }
 }
 
