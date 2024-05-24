@@ -66,3 +66,17 @@ export class TermueNode {
         return maybeChild.isChildOf(this)
     }
 }
+
+export class TermueDOMElement extends TermueNode {
+    public override yogaNode: YogaNode
+    public readonly id: string = (Math.random() * 10000).toFixed(0).toString()
+
+    public constructor(
+        public tag: Tag,
+        yogaConfig?: YogaConfig,
+    ) {
+        super()
+
+        this.yogaNode = Yoga.Node.create(yogaConfig)
+    }
+}
