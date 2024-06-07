@@ -11,12 +11,33 @@ export type Tag = Capitalize<typeof TERMUE_ELEMENTS_NAMES[number]>
 
 export abstract class TermueDOMNode {
     public abstract readonly nodeName: TermueNodeNames | TermueElementNames
-    public parentNode: DOMElement | null = null
+    protected _parentNode: TermueDOMElement | null = null
+
+    public get parentNode(): typeof this._parentNode {
+        return this._parentNode
+    }
+
+    public set parentNode(node: TermueDOMElement) {
+        this._parentNode = node
+    }
 }
 
 export class TermueTextDOMNode extends TermueDOMNode {
     public nodeName: "node:#text" = 'node:#text'
     public nodeValue: string
+    protected _parentNode: TermueTextDOMElement | null = null
+
+    public get parentNode(): typeof this._parentNode {
+        return this._parentNode
+    }
+
+    public set parentNode(node: TermueTextDOMElement) {
+        if (!TermueTextDOMElement.isTextDOMElement(node)) {
+            throw new Error("Text nodes cannot be outside TextDOMElement")
+        }
+
+        this._parentNode = node
+    }
 
     public constructor(value: string) {
         super()
@@ -36,27 +57,29 @@ export class TermueCommentDOMNode extends TermueDOMNode {
 
 export abstract class TermueDOMElement extends TermueDOMNode {
     public abstract nodeName: TermueElementNames;
-    public children: TermueDOMNode[] = []
+    protected _childNodes: TermueDOMNode[] = []
     public yogaNode: YogaNode = Yoga.Node.create()
 
-    public addChild(...child: TermueDOMNode[]) {
-        this.children.push(...child)
+    public get childNodes(): typeof this._childNodes {
+        return this._childNodes
+    }
 
-        child.forEach((child) => {
-            child.parentNode = this
+    public set parentNode(node: TermueDOMElement) {
+        node.yogaNode.insertChild(this.yogaNode, node.yogaNode.getChildCount())
+        super.parentNode = node
+    }
 
-            if (!TermueDOMElement.isTermueDOMElement(child)) {
-                return
-            }
-
-            this.yogaNode.insertChild(child.yogaNode, this.yogaNode.getChildCount())
+    public addChildNodes(...nodes: TermueDOMNode[]) {
+        nodes.forEach((node) => {
+            node.parentNode = this
+            this._childNodes.push(node)
         })
     }
 
     public static isTermueDOMElement(
         node: TermueDOMNode
     ): node is TermueDOMElement {
-        return node.nodeName.startsWith('element:')
+        return node.nodeName.startsWith(TERMUE_ELEMENTS_PREFIX)
     }
 }
 
@@ -68,52 +91,28 @@ export class TermueTextDOMElement extends TermueDOMElement {
     public nodeName: "element:text" = 'element:text'
     public children: TermueTextDOMNode[] = []
 
-    public addChild(...child: TermueDOMNode[]): void {
+    public addChildNodes(...child: TermueDOMNode[]): void {
         const textNodeChildren = child.filter((child) =>
             child.nodeName === 'node:#comment'
             || child.nodeName === 'node:#text'
         )
 
-        super.addChild(...textNodeChildren)
+        super.addChildNodes(...textNodeChildren)
+    }
+
+    public static isTextDOMElement(node: TermueDOMNode): node is TermueTextDOMElement {
+        return node.nodeName === 'element:text'
     }
 }
 
 export class TermueRootDOMElement extends TermueDOMElement {
     public nodeName: "element:root" = 'element:root'
-    public parentNode: null = null
 }
 
 // export class TermueDOMNode {
 //     public yogaNode?: YogaNode | null = null
 //     private _parent?: TermueNode | null = null
 //     private _children: TermueNode[] = []
-
-//     public get children(): typeof this._children {
-//         return this._children
-//     }
-
-//     public get parent(): typeof this._parent {
-//         return this._parent
-//     }
-
-//     public set parent(node: NonNullable<typeof this._parent>) {
-//         node.addChild(this)
-//     }
-
-//     public addChild<T extends TermueNode>(node: T) {
-//         if (node.isChildOf(this)) {
-//             return
-//         }
-
-//         this._children.push(node)
-//         node._parent = this
-
-//         if (!this.yogaNode || !node.yogaNode) {
-//             return
-//         }
-
-//         this.yogaNode.insertChild(node.yogaNode, this.yogaNode.getChildCount())
-//     }
 
 //     public removeChild<T extends TermueNode>(node: T) {
 //         if (!node.isChildOf(this)) {
