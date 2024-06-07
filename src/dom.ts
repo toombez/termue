@@ -20,6 +20,11 @@ export abstract class TermueDOMNode {
     public set parentNode(node: TermueDOMElement) {
         this._parentNode = node
     }
+
+    public isChildOf(maybeParent: TermueDOMElement): boolean {
+        console.log(this.nodeName, this.parentNode)
+        return this.parentNode === maybeParent
+    }
 }
 
 export class TermueTextDOMNode extends TermueDOMNode {
@@ -36,7 +41,7 @@ export class TermueTextDOMNode extends TermueDOMNode {
             throw new Error("Text nodes cannot be outside TextDOMElement")
         }
 
-        this._parentNode = node
+        super.parentNode = node
     }
 
     public constructor(value: string) {
@@ -64,6 +69,10 @@ export abstract class TermueDOMElement extends TermueDOMNode {
         return this._childNodes
     }
 
+    public get parentNode(): typeof this._parentNode {
+        return super.parentNode
+    }
+
     public set parentNode(node: TermueDOMElement) {
         node.yogaNode.insertChild(this.yogaNode, node.yogaNode.getChildCount())
         super.parentNode = node
@@ -74,6 +83,10 @@ export abstract class TermueDOMElement extends TermueDOMNode {
             node.parentNode = this
             this._childNodes.push(node)
         })
+    }
+
+    public isParentOf(maybeChild: TermueDOMNode): boolean {
+        return maybeChild.isChildOf(this)
     }
 
     public static isTermueDOMElement(
@@ -91,16 +104,19 @@ export class TermueTextDOMElement extends TermueDOMElement {
     public nodeName: "element:text" = 'element:text'
     public children: TermueTextDOMNode[] = []
 
-    public addChildNodes(...child: TermueDOMNode[]): void {
-        const textNodeChildren = child.filter((child) =>
-            child.nodeName === 'node:#comment'
-            || child.nodeName === 'node:#text'
-        )
+    public addChildNodes(...nodes: TermueDOMNode[]): void {
+        const textNodeChildren = nodes
+            .filter((node) =>
+                node.nodeName === 'node:#comment'
+                || node.nodeName === 'node:#text'
+            )
 
         super.addChildNodes(...textNodeChildren)
     }
 
-    public static isTextDOMElement(node: TermueDOMNode): node is TermueTextDOMElement {
+    public static isTextDOMElement(
+        node: TermueDOMNode
+    ): node is TermueTextDOMElement {
         return node.nodeName === 'element:text'
     }
 }
@@ -132,14 +148,6 @@ export class TermueRootDOMElement extends TermueDOMElement {
 //         this.yogaNode.removeChild(node.yogaNode)
 //     }
 
-//     public isChildOf(maybeParent: TermueNode): boolean {
-//         return !!maybeParent._children.find((node) => node === this)
-//     }
-
-//     public isParentOf(maybeChild: TermueNode): boolean {
-//         return maybeChild.isChildOf(this)
-//     }
-
 //     public static traverseDepth<T, K, N extends TermueNode>(node: N, options?: TraversalOptions<T, K>) {
 //         options?.beforeCb?.(node)
 
@@ -148,36 +156,6 @@ export class TermueRootDOMElement extends TermueDOMElement {
 //         }
 
 //         options?.afterCb?.(node)
-//     }
-// }
-
-// export class TermueCommentNode extends TermueNode {
-//     constructor(public text: string) {
-//         super()
-//     }
-// }
-
-// export class TermueTextNode extends TermueNode {
-//     constructor(public text: string) {
-//         super()
-//     }
-// }
-
-// export class TermueDOMElement extends TermueNode {
-//     public override yogaNode: YogaNode
-//     public id: string = (Math.random() * 10000).toFixed(0).toString()
-
-//     public constructor(
-//         public tag: Tag,
-//         yogaConfig?: YogaConfig,
-//     ) {
-//         super()
-
-//         this.yogaNode = Yoga.Node.create(yogaConfig)
-//     }
-
-//     toString() {
-//         return `<${this.tag} />`
 //     }
 // }
 
