@@ -1,12 +1,12 @@
 import Yoga from "yoga-layout"
 
-import { TERMUE_ELEMENTS_NAMES, TERMUE_NODES_NAMES } from './constants'
+import { TERMUE_ELEMENTS_NAMES, TERMUE_ELEMENTS_PREFIX, TERMUE_NODES_NAMES, TERMUE_NODE_PREFIX } from './constants'
 
 export type YogaNode = ReturnType<typeof Yoga.Node.create>
 export type YogaConfig = ReturnType<typeof Yoga.Config.create>
 
-export type TermueNodeNames = `node:#${typeof TERMUE_NODES_NAMES[number]}`
-export type TermueElementNames = `element:${typeof TERMUE_ELEMENTS_NAMES[number]}`
+export type TermueNodeNames = `${typeof TERMUE_NODE_PREFIX}${typeof TERMUE_NODES_NAMES[number]}`
+export type TermueElementNames = `${typeof TERMUE_ELEMENTS_PREFIX}${typeof TERMUE_ELEMENTS_NAMES[number]}`
 export type Tag = Capitalize<typeof TERMUE_ELEMENTS_NAMES[number]>
 
 export abstract class TermueDOMNode {
