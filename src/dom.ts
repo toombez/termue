@@ -17,12 +17,22 @@ export abstract class TermueDOMNode {
         return this._parentNode
     }
 
-    public set parentNode(node: TermueDOMElement) {
+    public set parentNode(node: TermueDOMElement | null) {
+        if (this.isChildOf(node)) {
+            return
+        }
+
         this._parentNode = node
     }
 
-    public isChildOf(maybeParent: TermueDOMElement): boolean {
-        console.log(this.nodeName, this.parentNode)
+    public isChildOf(maybeParent: TermueDOMElement | null): boolean {
+        const isMaybeParentEmpty = maybeParent === null
+        const isNotHaveParentNode = this.parentNode === null
+
+        if (isMaybeParentEmpty || !isNotHaveParentNode) {
+            return false
+        }
+
         return this.parentNode === maybeParent
     }
 }
@@ -30,19 +40,6 @@ export abstract class TermueDOMNode {
 export class TermueTextDOMNode extends TermueDOMNode {
     public nodeName: "node:#text" = 'node:#text'
     public nodeValue: string
-    protected _parentNode: TermueTextDOMElement | null = null
-
-    public get parentNode(): typeof this._parentNode {
-        return this._parentNode
-    }
-
-    public set parentNode(node: TermueTextDOMElement) {
-        if (!TermueTextDOMElement.isTextDOMElement(node)) {
-            throw new Error("Text nodes cannot be outside TextDOMElement")
-        }
-
-        super.parentNode = node
-    }
 
     public constructor(value: string) {
         super()
@@ -61,11 +58,11 @@ export class TermueCommentDOMNode extends TermueDOMNode {
 }
 
 export abstract class TermueDOMElement extends TermueDOMNode {
-    public abstract nodeName: TermueElementNames;
+    public abstract nodeName: TermueElementNames
     protected _childNodes: TermueDOMNode[] = []
     public yogaNode: YogaNode = Yoga.Node.create()
 
-    public get childNodes(): typeof this._childNodes {
+    public get childNodes(): Readonly<typeof this._childNodes> {
         return this._childNodes
     }
 
@@ -73,8 +70,14 @@ export abstract class TermueDOMElement extends TermueDOMNode {
         return super.parentNode
     }
 
-    public set parentNode(node: TermueDOMElement) {
-        node.yogaNode.insertChild(this.yogaNode, node.yogaNode.getChildCount())
+    public set parentNode(node: TermueDOMElement | null) {
+        if (node === null && this.parentNode !== null) {
+            this.parentNode.yogaNode.removeChild(this.yogaNode)
+        } else if (node !== null) {
+            const yogaChildCount = node.yogaNode.getChildCount()
+            node.yogaNode.insertChild(this.yogaNode, yogaChildCount)
+        }
+
         super.parentNode = node
     }
 
@@ -83,6 +86,18 @@ export abstract class TermueDOMElement extends TermueDOMNode {
             node.parentNode = this
             this._childNodes.push(node)
         })
+    }
+
+    public removeChildNodes(...nodes: TermueDOMNode[]) {
+        nodes
+            .filter((node) => node.isChildOf(this))
+            .forEach((childNode) => {
+                childNode.parentNode = null
+                const indexOfChildNode = this.childNodes
+                    .findIndex((node) => node === childNode)
+
+                this._childNodes.splice(indexOfChildNode, 1)
+            })
     }
 
     public isParentOf(maybeChild: TermueDOMNode): boolean {
