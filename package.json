@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsup",
-    "dev": "pnpm run build --watch --on-success=\"node dist/index.js\""
+    "dev": "pnpm run build --watch --on-success=\"node dist/index.js\"",
+    "dev:ts": "tsx ./src/index.ts"
   },
   "keywords": ["vue", "terminal"],
   "license": "MIT",
