@@ -1,16 +1,24 @@
 import Yoga from "yoga-layout"
-
-import { TERMUE_ELEMENTS_NAMES, TERMUE_ELEMENTS_PREFIX, TERMUE_NODES_NAMES, TERMUE_NODE_PREFIX } from './constants'
+import {
+    TERMUE_ELEMENTS_NAMES,
+    TERMUE_ELEMENTS_PREFIX,
+    TERMUE_NODES_NAMES,
+} from './constants'
+import {
+    ExtractElementNames,
+    ExtractNodeNames,
+    ExtractTags,
+} from "./utils"
 
 export type YogaNode = ReturnType<typeof Yoga.Node.create>
 export type YogaConfig = ReturnType<typeof Yoga.Config.create>
 
-export type TermueNodeNames = `${typeof TERMUE_NODE_PREFIX}${typeof TERMUE_NODES_NAMES[number]}`
-export type TermueElementNames = `${typeof TERMUE_ELEMENTS_PREFIX}${typeof TERMUE_ELEMENTS_NAMES[number]}`
-export type Tag = Capitalize<typeof TERMUE_ELEMENTS_NAMES[number]>
+export type TermueNodeName = ExtractNodeNames<typeof TERMUE_NODES_NAMES>
+export type TermueElementName = ExtractElementNames<typeof TERMUE_ELEMENTS_NAMES>
+export type Tag = ExtractTags<typeof TERMUE_ELEMENTS_NAMES>
 
 export abstract class TermueDOMNode {
-    public abstract readonly nodeName: TermueNodeNames | TermueElementNames
+    public abstract readonly nodeName: TermueNodeName | TermueElementName
     protected _parentNode: TermueDOMElement | null = null
 
     public get parentNode(): typeof this._parentNode {
@@ -37,28 +45,8 @@ export abstract class TermueDOMNode {
     }
 }
 
-export class TermueTextDOMNode extends TermueDOMNode {
-    public nodeName: "node:#text" = 'node:#text'
-    public nodeValue: string
-
-    public constructor(value: string) {
-        super()
-        this.nodeValue = value
-    }
-}
-
-export class TermueCommentDOMNode extends TermueDOMNode {
-    public nodeName: "node:#comment" = 'node:#comment'
-    public nodeValue: string
-
-    public constructor(value: string) {
-        super()
-        this.nodeValue = value
-    }
-}
-
 export abstract class TermueDOMElement extends TermueDOMNode {
-    public abstract nodeName: TermueElementNames
+    public abstract nodeName: TermueElementName
     protected _childNodes: TermueDOMNode[] = []
     public yogaNode: YogaNode = Yoga.Node.create()
 
@@ -111,6 +99,26 @@ export abstract class TermueDOMElement extends TermueDOMNode {
     }
 }
 
+export class TermueTextDOMNode extends TermueDOMNode {
+    public nodeName: "node:#text" = 'node:#text'
+    public nodeValue: string
+
+    public constructor(value: string) {
+        super()
+        this.nodeValue = value
+    }
+}
+
+export class TermueCommentDOMNode extends TermueDOMNode {
+    public nodeName: "node:#comment" = 'node:#comment'
+    public nodeValue: string
+
+    public constructor(value: string) {
+        super()
+        this.nodeValue = value
+    }
+}
+
 export class TermueBoxDOMElement extends TermueDOMElement {
     public nodeName: "element:box" = 'element:box'
 }
@@ -140,41 +148,8 @@ export class TermueRootDOMElement extends TermueDOMElement {
     public nodeName: "element:root" = 'element:root'
 }
 
-// export class TermueDOMNode {
-//     public yogaNode?: YogaNode | null = null
-//     private _parent?: TermueNode | null = null
-//     private _children: TermueNode[] = []
-
-//     public removeChild<T extends TermueNode>(node: T) {
-//         if (!node.isChildOf(this)) {
-//             return
-//         }
-
-//         const removeChildrenIndex = this._children
-//             .findIndex((_node) => _node === node)
-
-//         this._children.splice(removeChildrenIndex, 1)
-//         node._parent = null
-
-//         if (!this.yogaNode || !node.yogaNode) {
-//             return
-//         }
-
-//         this.yogaNode.removeChild(node.yogaNode)
-//     }
-
-//     public static traverseDepth<T, K, N extends TermueNode>(node: N, options?: TraversalOptions<T, K>) {
-//         options?.beforeCb?.(node)
-
-//         for (let child of node.children) {
-//             this.traverseDepth(child, options)
-//         }
-
-//         options?.afterCb?.(node)
-//     }
-// }
-
-export type DOMNode = TermueDOMNode
+export type DOMNode =
+    TermueDOMNode
     | TermueCommentDOMNode
     | TermueTextDOMNode
 
