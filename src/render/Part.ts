@@ -6,7 +6,7 @@ export type PartOptions = {
     transformers: TextTransformer[]
 }
 
-const DEFAULT_PART_OPTIONS: PartOptions = {
+export const DEFAULT_PART_OPTIONS: PartOptions = {
     transformers: [],
     x: 0,
     y: 0,
