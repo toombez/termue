@@ -1,22 +1,8 @@
 import sliceAnsi from "slice-ansi"
 import stringWidth from "string-width"
+import Part from "./Part"
 
-export type TextTransformer = (text: string) => string
-
-export class Part {
-    public constructor(
-        public readonly x: number,
-        public readonly y: number,
-        public readonly text: string,
-        public readonly transformers: TextTransformer[] = [],
-    ) {}
-
-    public get lines() {
-        return this.text.split("\n")
-    }
-}
-
-export class Output {
+export default class Output {
     private readonly parts: Part[] = []
     private readonly resultLines: string[]
 
@@ -27,43 +13,37 @@ export class Output {
         this.resultLines = Output.generateEmptyLines(width, height)
     }
 
-    public addParts(...part: Part[]): Output {
-        this.parts.push(...part)
+    public addParts(...parts: Part[]): Output {
+        this.parts.push(...parts)
 
         return this
     }
 
-    public compose(): Output {
-        this.parts.forEach(this.composePart.bind(this))
+    public compose() {
+        this.parts.forEach((part) => { part
+            .applyTransformers()
+            .text
+            .split('\n').forEach((line, lineIndex) => {
+                const y = part.y + lineIndex
+                const resultLine = this.resultLines[y]
+
+                if (!resultLine) {
+                    return
+                }
+
+                const x = part.x
+                const allowedWidth = this.width - x
+                const width = Math.min(allowedWidth, stringWidth(line))
+
+                const left = sliceAnsi(resultLine, 0, x)
+                const middle = sliceAnsi(line, 0, width)
+                const right = sliceAnsi(resultLine, x + width, this.width)
+
+                this.resultLines[y] = left + middle + right
+            })
+        })
 
         return this
-    }
-
-    private composePart(part: Part) {
-        part.lines.forEach((line, lineIndex) => this.composeLine(part, line, lineIndex))
-    }
-
-    private composeLine(part: Part, line: string, lineIndex: number) {
-        const y = part.y + lineIndex
-        const resultLine = this.resultLines[y]
-
-        if (!resultLine) {
-            return
-        }
-
-        const x = part.x
-        const allowedWidth = this.width - x
-        const width = Math.min(allowedWidth, stringWidth(line))
-
-        const left = sliceAnsi(resultLine, 0, x)
-        const middle = part.transformers
-            .reduce(
-                (middle, transformer) => transformer(middle),
-                sliceAnsi(line, 0, width)
-            )
-        const right = sliceAnsi(resultLine, x + width, this.width)
-
-        this.resultLines[y] = left + middle + right
     }
 
     public get result(): string {
