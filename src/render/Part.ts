@@ -18,7 +18,7 @@ export default class Part {
     public readonly y: PartOptions['y']
 
     public constructor(
-        public readonly text: string,
+        protected _text: string,
         options: Partial<PartOptions> = DEFAULT_PART_OPTIONS,
     ) {
         const {
@@ -32,7 +32,7 @@ export default class Part {
         this.y = y
     }
 
-    public addTransformers(...transformers: TextTransformer[]): Part {
+    public addTransformers(...transformers: TextTransformer[]): typeof this {
         this.transformers.push(...transformers)
 
         return this
@@ -44,6 +44,10 @@ export default class Part {
                 (text, transformer) => transformer(text),
                 this.text
             )
+    }
+
+    public get text(): string {
+        return this._text
     }
 
     public applyTransformers(): Part {
