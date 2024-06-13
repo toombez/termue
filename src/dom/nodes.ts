@@ -121,8 +121,7 @@ export abstract class TermueDOMElement extends TermueDOMNode {
     }
 }
 
-export class TermueTextDOMNode extends TermueDOMNode {
-    public nodeName: "node:#text" = 'node:#text'
+abstract class TermueDOMNodeWithStringValue extends TermueDOMNode {
     public nodeValue: string
 
     public constructor(value: string) {
@@ -131,14 +130,12 @@ export class TermueTextDOMNode extends TermueDOMNode {
     }
 }
 
-export class TermueCommentDOMNode extends TermueDOMNode {
-    public nodeName: "node:#comment" = 'node:#comment'
-    public nodeValue: string
+export class TermueTextDOMNode extends TermueDOMNodeWithStringValue {
+    public nodeName: "node:#text" = 'node:#text'
+}
 
-    public constructor(value: string) {
-        super()
-        this.nodeValue = value
-    }
+export class TermueCommentDOMNode extends TermueDOMNodeWithStringValue {
+    public nodeName: "node:#comment" = 'node:#comment'
 }
 
 export class TermueBoxDOMElement extends TermueDOMElement {
@@ -147,10 +144,31 @@ export class TermueBoxDOMElement extends TermueDOMElement {
 
 export class TermueTextDOMElement extends TermueDOMElement {
     public nodeName: "element:text" = 'element:text'
+
+    public addChildNodes(...nodes: TermueDOMNode[]): void {
+        const isAllowedNodes = nodes
+            .filter((node) =>
+                node.nodeName === 'node:#text'
+                || node.nodeName === 'element:text'
+                || node.nodeName === 'node:#comment'
+            )
+            .length === nodes.length
+
+        if (!isAllowedNodes) {
+            throw new Error("Text node can only contain text and commend nodes or text element")
+        }
+
+        super.addChildNodes(...nodes)
+    }
 }
 
 export class TermueRootDOMElement extends TermueDOMElement {
     public nodeName: "element:root" = 'element:root'
+    protected _parentNode: null = null
+
+    public get parentNode() {
+        return this._parentNode
+    }
 }
 
 export type DOMNode =
