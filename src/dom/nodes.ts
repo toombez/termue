@@ -3,6 +3,7 @@ import {
     TERMUE_ELEMENTS_NAMES,
     TERMUE_ELEMENTS_PREFIX,
     TERMUE_NODES_NAMES,
+    TERMUE_NODE_PREFIX,
 } from './constants'
 import {
     ExtractElementNames,
@@ -21,81 +22,57 @@ export abstract class TermueDOMNode {
     public abstract readonly nodeName: TermueNodeName | TermueElementName
     protected _parentNode: TermueDOMElement | null = null
 
-    public get parentNode(): typeof this._parentNode {
+    public get parentNode(): TermueDOMElement | null {
         return this._parentNode
     }
 
-    public set parentNode(node: TermueDOMElement | null) {
-        if (this.isChildOf(node)) {
+    public set parentNode(maybeParent: TermueDOMElement | null) {
+        if (maybeParent === null) {
+            this.removeParentNode()
             return
         }
 
-        this._parentNode = node
+        this.setParentNode(maybeParent)
     }
 
-    public isChildOf(maybeParent: TermueDOMElement | null): boolean {
-        const isMaybeParentEmpty = maybeParent === null
-        const isNotHaveParentNode = this.parentNode === null
-
-        if (isMaybeParentEmpty || !isNotHaveParentNode) {
-            return false
+    public removeParentNode() {
+        if (!this.parentNode) {
+            return
         }
 
-        return this.parentNode === maybeParent
+        const childIndex = this
+            .parentNode
+            .childNodes
+            .findIndex((node) => node === this)
+
+        this.parentNode.childNodes.splice(childIndex, 1)
+        this._parentNode = null
+    }
+
+    public setParentNode(parentNode: TermueDOMElement) {
+        parentNode?.childNodes.push(this)
+        this._parentNode = parentNode
     }
 }
 
 export abstract class TermueDOMElement extends TermueDOMNode {
     public abstract nodeName: TermueElementName
-    protected _childNodes: TermueDOMNode[] = []
-    public yogaNode: YogaNode = Yoga.Node.create()
+    public readonly yogaNode: YogaNode = Yoga.Node.create()
+    public readonly childNodes: TermueDOMNode[] = []
 
-    public get childNodes(): Readonly<typeof this._childNodes> {
-        return this._childNodes
+    public removeParentNode(): void {
+        this.parentNode?.yogaNode.removeChild(this.yogaNode)
+        super.removeParentNode()
     }
 
-    public get parentNode(): typeof this._parentNode {
-        return super.parentNode
+    public setParentNode(parentNode: TermueDOMElement): void {
+        super.setParentNode(parentNode)
+        const childCount = parentNode.yogaNode.getChildCount()
+        parentNode.yogaNode.insertChild(this.yogaNode, childCount)
     }
 
-    public set parentNode(node: TermueDOMElement | null) {
-        if (node === null && this.parentNode !== null) {
-            this.parentNode.yogaNode.removeChild(this.yogaNode)
-        } else if (node !== null) {
-            const yogaChildCount = node.yogaNode.getChildCount()
-            node.yogaNode.insertChild(this.yogaNode, yogaChildCount)
-        }
-
-        super.parentNode = node
-    }
-
-    public addChildNodes(...nodes: TermueDOMNode[]) {
-        nodes.forEach((node) => {
-            node.parentNode = this
-            this._childNodes.push(node)
-        })
-    }
-
-    public removeChildNodes(...nodes: TermueDOMNode[]) {
-        nodes
-            .filter((node) => node.isChildOf(this))
-            .forEach((childNode) => {
-                childNode.parentNode = null
-                const indexOfChildNode = this.childNodes
-                    .findIndex((node) => node === childNode)
-
-                this._childNodes.splice(indexOfChildNode, 1)
-            })
-    }
-
-    public isParentOf(maybeChild: TermueDOMNode): boolean {
-        return maybeChild.isChildOf(this)
-    }
-
-    public static isTermueDOMElement(
-        node: TermueDOMNode
-    ): node is TermueDOMElement {
-        return node.nodeName.startsWith(TERMUE_ELEMENTS_PREFIX)
+    public addChildNodes(...n: TermueDOMNode[]) {
+        n.forEach((n) => n.parentNode = this)
     }
 }
 
@@ -125,23 +102,6 @@ export class TermueBoxDOMElement extends TermueDOMElement {
 
 export class TermueTextDOMElement extends TermueDOMElement {
     public nodeName: "element:text" = 'element:text'
-    public children: TermueTextDOMNode[] = []
-
-    public addChildNodes(...nodes: TermueDOMNode[]): void {
-        const textNodeChildren = nodes
-            .filter((node) =>
-                node.nodeName === 'node:#comment'
-                || node.nodeName === 'node:#text'
-            )
-
-        super.addChildNodes(...textNodeChildren)
-    }
-
-    public static isTextDOMElement(
-        node: TermueDOMNode
-    ): node is TermueTextDOMElement {
-        return node.nodeName === 'element:text'
-    }
 }
 
 export class TermueRootDOMElement extends TermueDOMElement {
