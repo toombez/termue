@@ -61,6 +61,14 @@ export abstract class TermueDOMNode {
         this._parentNode = parentNode
     }
 
+    public isChildOf(
+        maybeParent: TermueDOMElement
+    ): this is TermueDOMNodeWithParent<typeof this> {
+        return maybeParent
+            .childNodes
+            .find((node) => node === this) !== undefined
+    }
+
     public static isEmptyNode<T extends TermueDOMNode>(
         maybeNode: T | null
     ): maybeNode is null {
@@ -90,8 +98,26 @@ export abstract class TermueDOMElement extends TermueDOMNode {
         parentNode.yogaNode.insertChild(this.yogaNode, childCount)
     }
 
-    public addChildNodes(...n: TermueDOMNode[]) {
-        n.forEach((n) => n.parentNode = this)
+    public addChildNodes(...nodes: TermueDOMNode[]) {
+        nodes
+            .filter((node) => !node.isChildOf(this))
+            .forEach((node) => node.parentNode = this)
+    }
+
+    public removeChildNodes(...nodes: TermueDOMNode[]) {
+        nodes
+            .filter((node) => node.isChildOf(this))
+            .forEach((node) => node.parentNode = null)
+    }
+
+    public isParentOf<T extends TermueDOMNode>(
+        maybeChild: T
+    ): maybeChild is TermueDOMNodeWithParent<T> {
+        return maybeChild.isChildOf(this)
+    }
+
+    public isHaveChildren(): boolean {
+        return this.childNodes.length > 0
     }
 }
 
