@@ -18,6 +18,13 @@ export type TermueNodeName = ExtractNodeNames<typeof TERMUE_NODES_NAMES>
 export type TermueElementName = ExtractElementNames<typeof TERMUE_ELEMENTS_NAMES>
 export type Tag = ExtractTags<typeof TERMUE_ELEMENTS_NAMES>
 
+export type TermueDOMNodeWithParent<
+    T extends TermueDOMNode
+> = T
+    & {
+        parentNode: TermueDOMElement
+    }
+
 export abstract class TermueDOMNode {
     public abstract readonly nodeName: TermueNodeName | TermueElementName
     protected _parentNode: TermueDOMElement | null = null
@@ -27,7 +34,7 @@ export abstract class TermueDOMNode {
     }
 
     public set parentNode(maybeParent: TermueDOMElement | null) {
-        if (maybeParent === null) {
+        if (TermueDOMNode.isEmptyNode(maybeParent)) {
             this.removeParentNode()
             return
         }
@@ -36,7 +43,7 @@ export abstract class TermueDOMNode {
     }
 
     public removeParentNode() {
-        if (!this.parentNode) {
+        if (!TermueDOMNode.isHaveParent<TermueDOMNode>(this)) {
             return
         }
 
@@ -52,6 +59,18 @@ export abstract class TermueDOMNode {
     public setParentNode(parentNode: TermueDOMElement) {
         parentNode?.childNodes.push(this)
         this._parentNode = parentNode
+    }
+
+    public static isEmptyNode<T extends TermueDOMNode>(
+        maybeNode: T | null
+    ): maybeNode is null {
+        return maybeNode === null
+    }
+
+    public static isHaveParent<T extends TermueDOMNode>(
+        node: T
+    ): node is TermueDOMNodeWithParent<T> {
+        return node.parentNode !== null
     }
 }
 
