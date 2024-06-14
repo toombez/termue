@@ -1,8 +1,8 @@
 import { ForegroundColorName, foregroundColorNames } from 'chalk'
 import { BorderColor, BorderSide, BorderStyle, Color, HexColor, RGBColor } from './values'
 import { YogaNode } from '../dom'
-import { BorderStyles, DisplayStyles, MarginStyles, PaddingStyles } from '.'
-import Yoga, { Display, Edge, Overflow } from 'yoga-layout'
+import { BorderStyles, DisplayStyles, MarginStyles, PaddingStyles, PositionStyles } from '.'
+import Yoga, { Display, Edge, Overflow, PositionType } from 'yoga-layout'
 
 export function isHexColor(color: Color): color is HexColor {
     if (typeof color !== 'string') {
@@ -159,6 +159,47 @@ export function applyMarginToYoga(styles: Partial<MarginStyles>, node: YogaNode)
     applyMarginToYogaEdge(marginLeft, Yoga.EDGE_LEFT, node)
 }
 
+function applyPositionToYogaEdge(position: number | undefined, edge: Edge, node: YogaNode) {
+    if (position === undefined) {
+        return
+    }
+
+    node.setPosition(edge, position)
+}
+
+export function applyPositionToYoga(styles: Partial<PositionStyles>, node: YogaNode) {
+    const {
+        position,
+        aroundOffset,
+        verticalOffset,
+        horizontalOffset,
+        topOffset,
+        rightOffset,
+        bottomOffset,
+        leftOffset,
+    } = styles
+
+    const positionType = position === 'absolute'
+        ? PositionType.Absolute
+        : position === 'relative'
+            ? PositionType.Relative
+            : PositionType.Static
+
+    if (position !== undefined) {
+        node.setPositionType(positionType)
+    }
+
+    applyPositionToYogaEdge(aroundOffset, Yoga.EDGE_ALL, node)
+
+    applyPositionToYogaEdge(verticalOffset, Yoga.EDGE_VERTICAL, node)
+    applyPositionToYogaEdge(horizontalOffset, Yoga.EDGE_HORIZONTAL, node)
+
+    applyPositionToYogaEdge(topOffset, Yoga.EDGE_TOP, node)
+    applyPositionToYogaEdge(rightOffset, Yoga.EDGE_RIGHT, node)
+    applyPositionToYogaEdge(bottomOffset, Yoga.EDGE_BOTTOM, node)
+    applyPositionToYogaEdge(leftOffset, Yoga.EDGE_LEFT, node)
+}
+
 export function applyDisplayStyles(styles: Partial<DisplayStyles>, node: YogaNode) {
     const {
         display,
@@ -186,9 +227,11 @@ type ApplyStylesToYogaStyles = Partial<
     & MarginStyles
     & PaddingStyles
     & DisplayStyles
+    & PositionStyles
 >
 
 export function applyStylesToYoga(styles: ApplyStylesToYogaStyles, node: YogaNode) {
+    applyPositionToYoga(styles, node)
     applyPaddingToYoga(styles, node)
     applyMarginToYoga(styles, node)
 

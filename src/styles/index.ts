@@ -58,12 +58,13 @@ export interface MarginStyles {
 
 export interface PositionStyles {
     readonly position: Position
-    readonly horizontal: DimensionValue
-    readonly vecrical: DimensionValue
-    readonly top: DimensionValue
-    readonly right: DimensionValue
-    readonly bottom: DimensionValue
-    readonly left: DimensionValue
+    readonly aroundOffset: DimensionValue
+    readonly horizontalOffset: DimensionValue
+    readonly verticalOffset: DimensionValue
+    readonly topOffset: DimensionValue
+    readonly rightOffset: DimensionValue
+    readonly bottomOffset: DimensionValue
+    readonly leftOffset: DimensionValue
 }
 
 export interface DimensionStyles {
