@@ -1,8 +1,8 @@
 import { ForegroundColorName, foregroundColorNames } from 'chalk'
 import { BorderColor, BorderSide, BorderStyle, Color, HexColor, RGBColor } from './values'
 import { YogaNode } from '../dom'
-import { BorderStyles, MarginStyles, PaddingStyles } from '.'
-import Yoga, { Edge } from 'yoga-layout'
+import { BorderStyles, DisplayStyles, MarginStyles, PaddingStyles } from '.'
+import Yoga, { Display, Edge, Overflow } from 'yoga-layout'
 
 export function isHexColor(color: Color): color is HexColor {
     if (typeof color !== 'string') {
@@ -159,15 +159,39 @@ export function applyMarginToYoga(styles: Partial<MarginStyles>, node: YogaNode)
     applyMarginToYogaEdge(marginLeft, Yoga.EDGE_LEFT, node)
 }
 
+export function applyDisplayStyles(styles: Partial<DisplayStyles>, node: YogaNode) {
+    const {
+        display,
+        overflow,
+    } = styles
+
+    const yogaDisplay = display === 'flex' ? Display.Flex : Display.None
+    const yogaOverflow = overflow === 'visible'
+        ? Overflow.Visible
+        : overflow === 'scroll'
+            ? Overflow.Scroll
+            : Overflow.Hidden
+
+    if (display !== undefined) {
+        node.setDisplay(yogaDisplay)
+    }
+
+    if (overflow !== undefined) {
+        node.setOverflow(yogaOverflow)
+    }
+}
+
 type ApplyStylesToYogaStyles = Partial<
     BorderStyles
     & MarginStyles
     & PaddingStyles
+    & DisplayStyles
 >
 
 export function applyStylesToYoga(styles: ApplyStylesToYogaStyles, node: YogaNode) {
     applyPaddingToYoga(styles, node)
     applyMarginToYoga(styles, node)
 
+    applyDisplayStyles(styles, node)
     applyBorderStylesToYoga(styles, node)
 }
