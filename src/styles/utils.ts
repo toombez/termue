@@ -1,7 +1,9 @@
+// TODO: rewrite utils for DRY and optimization
+
 import { ForegroundColorName, foregroundColorNames } from 'chalk'
 import { BorderColor, BorderSide, BorderStyle, Color, HexColor, RGBColor } from './values'
 import { YogaNode } from '../dom'
-import { BorderStyles, DisplayStyles, MarginStyles, PaddingStyles, PositionStyles } from '.'
+import { BorderStyles, DisplayStyles, FlexStyles, MarginStyles, PaddingStyles, PositionStyles } from '.'
 import Yoga, { Display, Edge, Overflow, PositionType } from 'yoga-layout'
 
 export function isHexColor(color: Color): color is HexColor {
@@ -222,18 +224,177 @@ export function applyDisplayStyles(styles: Partial<DisplayStyles>, node: YogaNod
     }
 }
 
+export function applyFlexStyles(styles: Partial<FlexStyles>, node: YogaNode) {
+    const {
+        flexDirection,
+        alignContent,
+        alignItems,
+        alignSelf,
+        justifyContent,
+        flex,
+        flexBasis,
+        flexGrow,
+        flexShrink,
+        flexWrap,
+        gap,
+        columnGap,
+        rowGap,
+    } = styles
+
+    if (flex !== undefined) {
+        node.setFlex(flex)
+    }
+
+    if (flexBasis !== undefined) {
+        node.setFlexBasis(flexBasis)
+    }
+
+    if (flexGrow !== undefined) {
+        node.setFlexGrow(flexGrow)
+    }
+
+    if (flexShrink !== undefined) {
+        node.setFlexShrink(flexShrink)
+    }
+
+    if (gap !== undefined) {
+        node.setGap(Yoga.GUTTER_ALL, gap)
+    }
+
+    if (columnGap !== undefined) {
+        node.setGap(Yoga.GUTTER_COLUMN, columnGap)
+    }
+
+    if (rowGap !== undefined) {
+        node.setGap(Yoga.GUTTER_ROW, rowGap)
+    }
+
+    if (flexDirection !== undefined) {
+        const direction = flexDirection === 'column'
+            ? Yoga.FLEX_DIRECTION_COLUMN
+            : flexDirection === 'column-reverse'
+                ? Yoga.FLEX_DIRECTION_COLUMN_REVERSE
+                : flexDirection === 'row'
+                    ? Yoga.FLEX_DIRECTION_ROW
+                    : Yoga.FLEX_DIRECTION_ROW_REVERSE
+
+        node.setFlexDirection(direction)
+    }
+
+    if (flexWrap !== undefined) {
+        const wrap = flexWrap === 'wrap'
+            ? Yoga.WRAP_WRAP
+            : flexWrap === 'wrap-reverse'
+                ? Yoga.WRAP_WRAP_REVERSE
+                : Yoga.WRAP_NO_WRAP
+
+        node.setFlexWrap(wrap)
+    }
+
+    if (alignContent !== undefined) {
+        let align
+        if (alignContent === 'baseline') {
+            align = Yoga.ALIGN_BASELINE
+        } else if (alignContent === 'center') {
+            align = Yoga.ALIGN_CENTER
+        } else if (alignContent === 'flex-around' || alignContent === 'space-around') {
+            align = Yoga.ALIGN_SPACE_AROUND
+        } else if (alignContent === 'flex-end') {
+            align = Yoga.ALIGN_FLEX_END
+        } else if (alignContent === 'flex-start') {
+            align = Yoga.ALIGN_FLEX_START
+        } else if (alignContent === 'space-between') {
+            align = Yoga.ALIGN_SPACE_BETWEEN
+        } else if (alignContent === 'space-evenly') {
+            align = Yoga.ALIGN_SPACE_EVENLY
+        } else {
+            align = Yoga.ALIGN_STRETCH
+        }
+
+        node.setAlignContent(align)
+    }
+
+    if (alignItems !== undefined) {
+        let align
+        if (alignItems === 'baseline') {
+            align = Yoga.ALIGN_BASELINE
+        } else if (alignItems === 'center') {
+            align = Yoga.ALIGN_CENTER
+        } else if (alignItems === 'flex-around' || alignItems === 'space-around') {
+            align = Yoga.ALIGN_SPACE_AROUND
+        } else if (alignItems === 'flex-end') {
+            align = Yoga.ALIGN_FLEX_END
+        } else if (alignItems === 'flex-start') {
+            align = Yoga.ALIGN_FLEX_START
+        } else if (alignItems === 'space-between') {
+            align = Yoga.ALIGN_SPACE_BETWEEN
+        } else if (alignItems === 'space-evenly') {
+            align = Yoga.ALIGN_SPACE_EVENLY
+        } else {
+            align = Yoga.ALIGN_STRETCH
+        }
+
+        node.setAlignItems(align)
+    }
+
+    if (alignSelf !== undefined) {
+        let align
+        if (alignSelf === 'baseline') {
+            align = Yoga.ALIGN_BASELINE
+        } else if (alignSelf === 'center') {
+            align = Yoga.ALIGN_CENTER
+        } else if (alignSelf === 'flex-around' || alignSelf === 'space-around') {
+            align = Yoga.ALIGN_SPACE_AROUND
+        } else if (alignSelf === 'flex-end') {
+            align = Yoga.ALIGN_FLEX_END
+        } else if (alignSelf === 'flex-start') {
+            align = Yoga.ALIGN_FLEX_START
+        } else if (alignSelf === 'space-between') {
+            align = Yoga.ALIGN_SPACE_BETWEEN
+        } else if (alignSelf === 'space-evenly') {
+            align = Yoga.ALIGN_SPACE_EVENLY
+        } else {
+            align = Yoga.ALIGN_STRETCH
+        }
+
+        node.setAlignSelf(align)
+    }
+
+    if (justifyContent !== undefined) {
+        let justify
+
+        if (justifyContent === 'center') {
+            justify = Yoga.JUSTIFY_CENTER
+        } else if (justifyContent === 'flex-around' || justifyContent === 'space-around') {
+            justify = Yoga.JUSTIFY_SPACE_AROUND
+        } else if (justifyContent === 'flex-end') {
+            justify = Yoga.JUSTIFY_FLEX_END
+        } else if (justifyContent === 'flex-start') {
+            justify = Yoga.JUSTIFY_FLEX_START
+        } else if (justifyContent === 'space-between') {
+            justify = Yoga.JUSTIFY_SPACE_BETWEEN
+        } else {
+            justify = Yoga.JUSTIFY_SPACE_EVENLY
+        }
+
+        node.setJustifyContent(justify)
+    }
+}
+
 type ApplyStylesToYogaStyles = Partial<
     BorderStyles
     & MarginStyles
     & PaddingStyles
     & DisplayStyles
     & PositionStyles
+    & FlexStyles
 >
 
 export function applyStylesToYoga(styles: ApplyStylesToYogaStyles, node: YogaNode) {
     applyPositionToYoga(styles, node)
     applyPaddingToYoga(styles, node)
     applyMarginToYoga(styles, node)
+    applyFlexStyles(styles, node)
 
     applyDisplayStyles(styles, node)
     applyBorderStylesToYoga(styles, node)
