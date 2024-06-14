@@ -33,6 +33,26 @@ export interface FlexStyles {
     readonly flexShrink: DimensionValue
 }
 
+export interface PaddingStyles {
+    readonly padding: DimensionValue
+    readonly paddingVertical: DimensionValue
+    readonly paddingHorizontal: DimensionValue
+    readonly paddingTop: DimensionValue
+    readonly paddingRight: DimensionValue
+    readonly paddingBottom: DimensionValue
+    readonly paddingLeft: DimensionValue
+}
+
+export interface MarginStyles {
+    readonly margin: DimensionValue
+    readonly marginVectical: DimensionValue
+    readonly marginHorizontal: DimensionValue
+    readonly marginTop: DimensionValue
+    readonly marginRight: DimensionValue
+    readonly marginBottom: DimensionValue
+    readonly marginLeft: DimensionValue
+}
+
 export interface DimensionStyles {
     readonly width: DimensionValue
     readonly height: DimensionValue
@@ -41,22 +61,6 @@ export interface DimensionStyles {
     readonly minWidth: DimensionValue
     readonly minHeight: DimensionValue
     readonly aspectRatio: number
-
-    readonly padding: DimensionValue
-    readonly paddingY: DimensionValue
-    readonly paddingX: DimensionValue
-    readonly paddingTop: DimensionValue
-    readonly paddingRight: DimensionValue
-    readonly paddingBottom: DimensionValue
-    readonly paddingLeft: DimensionValue
-
-    readonly margin: DimensionValue
-    readonly marginY: DimensionValue
-    readonly marginX: DimensionValue
-    readonly marginTop: DimensionValue
-    readonly marginRight: DimensionValue
-    readonly marginBottom: DimensionValue
-    readonly marginLeft: DimensionValue
 
     readonly position: Position
     readonly horizontal: DimensionValue
