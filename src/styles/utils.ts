@@ -158,3 +158,16 @@ export function applyMarginToYoga(styles: Partial<MarginStyles>, node: YogaNode)
     applyMarginToYogaEdge(marginBottom, Yoga.EDGE_BOTTOM, node)
     applyMarginToYogaEdge(marginLeft, Yoga.EDGE_LEFT, node)
 }
+
+type ApplyStylesToYogaStyles = Partial<
+    BorderStyles
+    & MarginStyles
+    & PaddingStyles
+>
+
+export function applyStylesToYoga(styles: ApplyStylesToYogaStyles, node: YogaNode) {
+    applyPaddingToYoga(styles, node)
+    applyMarginToYoga(styles, node)
+
+    applyBorderStylesToYoga(styles, node)
+}
