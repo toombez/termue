@@ -4,6 +4,7 @@ import type {
     AlignItems,
     AlignSelf,
     BorderSide,
+    Color,
     DimensionValue,
     Display,
     FlexDirection,
@@ -75,8 +76,8 @@ export interface TextTransformStyles {
 }
 
 export interface ColorStyles {
-    readonly color: string
-    readonly bgColor: string
+    readonly color: Color
+    readonly bgColor: Color
 }
 
 export interface TextStyles {
@@ -86,7 +87,7 @@ export interface TextStyles {
 
 export interface BorderStyles {
     readonly borderStyle: BorderStyle
-    readonly borderColor: string
+    readonly borderColor: Color
     readonly border: BorderSide
     readonly borderTop: BorderSide
     readonly borderRight: BorderSide

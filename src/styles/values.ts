@@ -1,3 +1,4 @@
+import { ForegroundColorName } from "chalk"
 import { Boxes } from "cli-boxes"
 
 export type DimensionValue = number
@@ -48,3 +49,9 @@ export type Overflow =
 export type BorderStyle = keyof Boxes
 
 export type BorderSide = `${BorderStyle} ${string}`
+
+export type HexColor = `#${string}`
+
+export type RGBColor = [number, number, number]
+
+export type Color = ForegroundColorName | HexColor | RGBColor
