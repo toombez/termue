@@ -1,47 +1,49 @@
 import { Boxes } from "cli-boxes"
 
+export type DimensionValue = number
+
 export interface GeneralStyles {
-    readonly width: number | string
-    readonly height: number | string
-    readonly maxWidth: number | string
-    readonly maxHeight: number | string
-    readonly minWidth: number | string
-    readonly minHeight: number | string
+    readonly width: DimensionValue
+    readonly height: DimensionValue
+    readonly maxWidth: DimensionValue
+    readonly maxHeight: DimensionValue
+    readonly minWidth: DimensionValue
+    readonly minHeight: DimensionValue
     readonly aspectRatio: number
 
     readonly color: string
     readonly bgColor: string
 
-    readonly padding: number | string
-    readonly paddingY: number | string
-    readonly paddingX: number | string
-    readonly paddingTop: number | string
-    readonly paddingRight: number | string
-    readonly paddingBottom: number | string
-    readonly paddingLeft: number | string
+    readonly padding: DimensionValue
+    readonly paddingY: DimensionValue
+    readonly paddingX: DimensionValue
+    readonly paddingTop: DimensionValue
+    readonly paddingRight: DimensionValue
+    readonly paddingBottom: DimensionValue
+    readonly paddingLeft: DimensionValue
 
-    readonly margin: number | string
-    readonly marginY: number | string
-    readonly marginX: number | string
-    readonly marginTop: number | string
-    readonly marginRight: number | string
-    readonly marginBottom: number | string
-    readonly marginLeft: number | string
+    readonly margin: DimensionValue
+    readonly marginY: DimensionValue
+    readonly marginX: DimensionValue
+    readonly marginTop: DimensionValue
+    readonly marginRight: DimensionValue
+    readonly marginBottom: DimensionValue
+    readonly marginLeft: DimensionValue
 
     readonly position: 'relative' | 'static' | 'absolute'
-    readonly horizontal: number | string
-    readonly vecrical: number | string
-    readonly top: number | string
-    readonly right: number | string
-    readonly bottom: number | string
-    readonly left: number | string
+    readonly horizontal: DimensionValue
+    readonly vecrical: DimensionValue
+    readonly top: DimensionValue
+    readonly right: DimensionValue
+    readonly bottom: DimensionValue
+    readonly left: DimensionValue
 
     readonly display: 'flex' | 'none'
     readonly overflow: 'hidden' | 'scroll' | 'visible'
 
-    readonly gap: number | string
-    readonly rowGap: number | string
-    readonly columnGap: number | string
+    readonly gap: DimensionValue
+    readonly rowGap: DimensionValue
+    readonly columnGap: DimensionValue
     readonly justifyContent:
         'center'
         | 'flex-end'
@@ -64,9 +66,9 @@ export interface GeneralStyles {
     readonly flexDirection: 'row' | 'column' | 'row-reverse' | 'column-reverse'
     readonly flexWrap: 'wrap' | 'no-wrap' | 'wrap-reverse'
     readonly flex: number
-    readonly flexBasis: number | string
-    readonly flexGrow: number | string
-    readonly flexShrink: number | string
+    readonly flexBasis: DimensionValue
+    readonly flexGrow: DimensionValue
+    readonly flexShrink: DimensionValue
 
     readonly underline: boolean
     readonly overline: boolean
@@ -84,6 +86,7 @@ export interface TextStyles extends GeneralStyles {
 export interface BoxStyles extends GeneralStyles {
     readonly borderStyle: keyof Boxes
     readonly borderColor: string
+    readonly border: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
 
     readonly borderTop: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
     readonly borderRight: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
