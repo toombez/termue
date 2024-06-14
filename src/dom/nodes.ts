@@ -2,8 +2,8 @@ import Yoga from "yoga-layout"
 import {
     TERMUE_ELEMENT_NAME,
     TERMUE_NODE_NAME,
+    TermueDOMName,
     TermueElementName,
-    TermueNodeName
 } from './constants'
 import {
     FlexStyles,
@@ -49,7 +49,7 @@ export type TermueDOMNodeWithParent<
     }
 
 export abstract class TermueDOMNode {
-    public abstract readonly nodeName: TermueNodeName | TermueElementName
+    public abstract readonly nodeName: TermueDOMName
     protected _parentNode: TermueDOMElement | null = null
 
     public get parentNode(): TermueDOMElement | null {
