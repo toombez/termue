@@ -440,3 +440,48 @@ export function applyStylesToYoga(styles: ApplyStylesToYogaStyles, node: YogaNod
     applyDisplayStyles(styles, node)
     applyBorderStylesToYoga(styles, node)
 }
+
+// Example
+/**
+import Yoga from "yoga-layout"
+import { applyStylesToYoga } from "./styles"
+import { BoxElementStyles } from "./dom"
+
+const $node = Yoga.Node.create()
+
+const styles: Partial<BoxElementStyles> = {
+    border: "arrow cyanBright",
+    borderRight: 0,
+    borderVertical: 0,
+    padding: 2,
+    paddingHorizontal: 1,
+    paddingBottom: 10,
+    paddingTop: 0,
+
+    margin: 3,
+    marginVertical: 4,
+
+    aroundOffset: 10,
+    verticalOffset: 8,
+    bottomOffset: 3,
+
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    gap: 8,
+
+    width: 80,
+    maxHeight: 100,
+}
+
+applyStylesToYoga(styles, $node)
+$node.setHeight(80)
+
+$node.calculateLayout(Yoga.UNIT_UNDEFINED, Yoga.UNIT_UNDEFINED, Yoga.DIRECTION_LTR)
+
+console.log($node.getComputedLayout())
+
+console.log($node.getPosition(Yoga.EDGE_TOP))
+console.log($node.getPosition(Yoga.EDGE_RIGHT))
+console.log($node.getPosition(Yoga.EDGE_BOTTOM))
+console.log($node.getPosition(Yoga.EDGE_LEFT))
+ */
