@@ -1,15 +1,10 @@
 import Yoga from "yoga-layout"
 import {
-    TERMUE_ELEMENTS_NAMES,
-    TERMUE_ELEMENTS_PREFIX,
-    TERMUE_NODES_NAMES,
-    TERMUE_NODE_PREFIX,
+    TERMUE_ELEMENT_NAME,
+    TERMUE_NODE_NAME,
+    TermueDOMName,
+    TermueElementName,
 } from './constants'
-import {
-    ExtractElementNames,
-    ExtractNodeNames,
-    ExtractTags,
-} from "./utils"
 import {
     FlexStyles,
     TextStyles,
@@ -46,10 +41,6 @@ export type TextElementStyles = Partial<
 export type YogaNode = ReturnType<typeof Yoga.Node.create>
 export type YogaConfig = ReturnType<typeof Yoga.Config.create>
 
-export type TermueNodeName = ExtractNodeNames<typeof TERMUE_NODES_NAMES>
-export type TermueElementName = ExtractElementNames<typeof TERMUE_ELEMENTS_NAMES>
-export type Tag = ExtractTags<typeof TERMUE_ELEMENTS_NAMES>
-
 export type TermueDOMNodeWithParent<
     T extends TermueDOMNode
 > = T
@@ -58,7 +49,7 @@ export type TermueDOMNodeWithParent<
     }
 
 export abstract class TermueDOMNode {
-    public abstract readonly nodeName: TermueNodeName | TermueElementName
+    public abstract readonly nodeName: TermueDOMName
     protected _parentNode: TermueDOMElement | null = null
 
     public get parentNode(): TermueDOMElement | null {
@@ -164,28 +155,28 @@ abstract class TermueDOMNodeWithStringValue extends TermueDOMNode {
 }
 
 export class TermueTextDOMNode extends TermueDOMNodeWithStringValue {
-    public nodeName: "node:#text" = 'node:#text'
+    public readonly nodeName = TERMUE_NODE_NAME.TEXT
 }
 
 export class TermueCommentDOMNode extends TermueDOMNodeWithStringValue {
-    public nodeName: "node:#comment" = 'node:#comment'
+    public readonly nodeName = TERMUE_NODE_NAME.COMMENT
 }
 
 export class TermueBoxDOMElement extends TermueDOMElement {
-    public nodeName: "element:box" = 'element:box'
+    public readonly nodeName = TERMUE_ELEMENT_NAME.BOX
     protected _styles: BoxElementStyles = {}
 }
 
 export class TermueTextDOMElement extends TermueDOMElement {
-    public nodeName: "element:text" = 'element:text'
+    public readonly nodeName = TERMUE_ELEMENT_NAME.TEXT
     protected _styles: TextElementStyles = {}
 
     public addChildNodes(...nodes: TermueDOMNode[]): void {
         const isAllowedNodes = nodes
             .filter((node) =>
-                node.nodeName === 'node:#text'
-                || node.nodeName === 'element:text'
-                || node.nodeName === 'node:#comment'
+                node.nodeName === TERMUE_NODE_NAME.TEXT
+                || node.nodeName === TERMUE_ELEMENT_NAME.TEXT
+                || node.nodeName === TERMUE_NODE_NAME.COMMENT
             )
             .length === nodes.length
 
@@ -198,7 +189,7 @@ export class TermueTextDOMElement extends TermueDOMElement {
 }
 
 export class TermueRootDOMElement extends TermueDOMElement {
-    public nodeName: "element:root" = 'element:root'
+    public readonly nodeName = TERMUE_ELEMENT_NAME.ROOT
     protected _parentNode: null = null
     protected _styles: BoxElementStyles = {}
 
