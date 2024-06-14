@@ -1,4 +1,5 @@
 import { BorderStyles } from "../../styles"
+import { TERMUE_ELEMENT_NAME } from "../constants"
 import { GeneralElementStyles } from "../shared"
 import { TermueDOMElement } from "./TermueDOMElement"
 
@@ -8,6 +9,6 @@ export type BoxElementStyles = Partial<
 >
 
 export class TermueBoxDOMElement extends TermueDOMElement {
-    public nodeName: "element:box" = 'element:box'
+    public readonly nodeName = TERMUE_ELEMENT_NAME.BOX
     protected _styles: BoxElementStyles = {}
 }

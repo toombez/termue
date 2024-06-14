@@ -1,7 +1,8 @@
+import { TERMUE_NODE_NAME } from "../constants"
 import { TermueDOMNode } from "./TermueDOMNode"
 
 export class TermueCommentDOMNode extends TermueDOMNode {
-    public nodeName: "node:#comment" = 'node:#comment'
+    public readonly nodeName = TERMUE_NODE_NAME.COMMENT
     public nodeValue: string
 
     public constructor(value: string) {

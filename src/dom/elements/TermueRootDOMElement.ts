@@ -1,8 +1,9 @@
+import { TERMUE_ELEMENT_NAME } from "../constants"
 import { BoxElementStyles } from "./TermueBoxDOMElement"
 import { TermueDOMElement } from "./TermueDOMElement"
 
 export class TermueRootDOMElement extends TermueDOMElement {
-    public nodeName: "element:root" = 'element:root'
+    public readonly nodeName = TERMUE_ELEMENT_NAME.ROOT
     protected _parentNode: null = null
     protected _styles: BoxElementStyles = {}
 

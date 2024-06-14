@@ -12,7 +12,7 @@ import { BoxElementStyles } from "./TermueBoxDOMElement"
 import { TextElementStyles } from "./TermueTextDOMElement"
 
 export abstract class TermueDOMElement extends TermueDOMNode {
-    public abstract nodeName: TermueElementName
+    public abstract readonly nodeName: TermueElementName
     public readonly yogaNode: YogaNode = Yoga.Node.create()
     public readonly childNodes: TermueDOMNode[] = []
     protected _styles: BoxElementStyles | TextElementStyles = {}
