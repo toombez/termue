@@ -1,5 +1,3 @@
-import { AddStringPrefix } from "./utils"
-
 const RAW_TERMUE_NODE_NAMES = [
     'text',
     'comment'
@@ -43,6 +41,11 @@ export const TERMUE_NODE_PREFIX =
 
 export const TERMUE_ELEMENT_PREFIX =
     `element${TERMUE_PREFIX_NAME_SEPARATOR}` as const
+
+type AddStringPrefix<
+    T extends string,
+    K extends string,
+> = `${T}${K}`
 
 type GetNamesConstant<
     Prefix extends Readonly<string>,
