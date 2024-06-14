@@ -10,6 +10,30 @@ import {
     ExtractNodeNames,
     ExtractTags,
 } from "./utils"
+import {
+    FlexStyles,
+    TextStyles,
+    ColorStyles,
+    BorderStyles,
+    DimensionStyles,
+    TextTransformStyles,
+} from "../styles"
+
+export type GeneralElementStyles =
+    FlexStyles
+    & TextTransformStyles
+    & ColorStyles
+    & DimensionStyles
+
+export type BoxElementStyles = Partial<
+    GeneralElementStyles
+    & BorderStyles
+>
+
+export type TextElementStyles = Partial<
+    GeneralElementStyles
+    & TextStyles
+>
 
 export type YogaNode = ReturnType<typeof Yoga.Node.create>
 export type YogaConfig = ReturnType<typeof Yoga.Config.create>
@@ -86,6 +110,7 @@ export abstract class TermueDOMElement extends TermueDOMNode {
     public abstract nodeName: TermueElementName
     public readonly yogaNode: YogaNode = Yoga.Node.create()
     public readonly childNodes: TermueDOMNode[] = []
+    protected _styles: BoxElementStyles | TextElementStyles = {}
 
     public removeParentNode(): void {
         this.parentNode?.yogaNode.removeChild(this.yogaNode)
@@ -140,10 +165,12 @@ export class TermueCommentDOMNode extends TermueDOMNodeWithStringValue {
 
 export class TermueBoxDOMElement extends TermueDOMElement {
     public nodeName: "element:box" = 'element:box'
+    protected _styles: BoxElementStyles = {}
 }
 
 export class TermueTextDOMElement extends TermueDOMElement {
     public nodeName: "element:text" = 'element:text'
+    protected _styles: TextElementStyles = {}
 
     public addChildNodes(...nodes: TermueDOMNode[]): void {
         const isAllowedNodes = nodes
@@ -165,6 +192,7 @@ export class TermueTextDOMElement extends TermueDOMElement {
 export class TermueRootDOMElement extends TermueDOMElement {
     public nodeName: "element:root" = 'element:root'
     protected _parentNode: null = null
+    protected _styles: BoxElementStyles = {}
 
     public get parentNode() {
         return this._parentNode
