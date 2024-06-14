@@ -1,10 +1,6 @@
 import Yoga from "yoga-layout"
 
 import {
-    BoxElementStyles,
-    TextElementStyles
-} from "../nodes"
-import {
     TermueDOMNode,
     TermueDOMNodeWithParent
 } from "../nodes/TermueDOMNode"
@@ -12,6 +8,8 @@ import {
     TermueElementName,
     YogaNode
 } from "../shared"
+import { BoxElementStyles } from "./TermueBoxDOMElement"
+import { TextElementStyles } from "./TermueTextDOMElement"
 
 export abstract class TermueDOMElement extends TermueDOMNode {
     public abstract nodeName: TermueElementName

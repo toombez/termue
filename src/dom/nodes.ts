@@ -1,58 +1,10 @@
-import {
-    TextStyles,
-    BorderStyles,
-} from "../styles"
-import { GeneralElementStyles, TermueElementName, TermueNodeName, YogaNode } from "./shared"
 import { TermueDOMNode } from "./nodes/TermueDOMNode"
 import { TermueDOMElement } from "./elements/TermueDOMElement"
 import { TermueCommentDOMNode } from "./nodes/TermueCommentDOMNode"
 import { TermueTextDOMNode } from "./nodes/TermueTextDOMNode"
-
-export type BoxElementStyles = Partial<
-    GeneralElementStyles
-    & BorderStyles
->
-
-export type TextElementStyles = Partial<
-    GeneralElementStyles
-    & TextStyles
->
-
-export class TermueBoxDOMElement extends TermueDOMElement {
-    public nodeName: "element:box" = 'element:box'
-    protected _styles: BoxElementStyles = {}
-}
-
-export class TermueTextDOMElement extends TermueDOMElement {
-    public nodeName: "element:text" = 'element:text'
-    protected _styles: TextElementStyles = {}
-
-    public addChildNodes(...nodes: TermueDOMNode[]): void {
-        const isAllowedNodes = nodes
-            .filter((node) =>
-                node.nodeName === 'node:#text'
-                || node.nodeName === 'element:text'
-                || node.nodeName === 'node:#comment'
-            )
-            .length === nodes.length
-
-        if (!isAllowedNodes) {
-            throw new Error("Text node can only contain text and commend nodes or text element")
-        }
-
-        super.addChildNodes(...nodes)
-    }
-}
-
-export class TermueRootDOMElement extends TermueDOMElement {
-    public nodeName: "element:root" = 'element:root'
-    protected _parentNode: null = null
-    protected _styles: BoxElementStyles = {}
-
-    public get parentNode() {
-        return this._parentNode
-    }
-}
+import { TermueBoxDOMElement } from "./elements/TermueBoxDOMElement"
+import { TermueTextDOMElement } from "./elements/TermueTextDOMElement"
+import { TermueRootDOMElement } from "./elements/TermueRootDOMElement"
 
 export type DOMNode =
     TermueDOMNode
