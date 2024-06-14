@@ -19,6 +19,8 @@ import {
     TextTransformStyles,
     PaddingStyles,
     MarginStyles,
+    DisplayStyles,
+    PositionStyles,
 } from "../styles"
 
 export type GeneralElementStyles =
@@ -28,6 +30,8 @@ export type GeneralElementStyles =
     & DimensionStyles
     & PaddingStyles
     & MarginStyles
+    & DisplayStyles
+    & PositionStyles
 
 export type BoxElementStyles = Partial<
     GeneralElementStyles

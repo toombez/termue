@@ -15,9 +15,12 @@ import type {
     Position
 } from "./values"
 
-export interface FlexStyles {
+export interface DisplayStyles {
     readonly overflow: Overflow
     readonly display: Display
+}
+
+export interface FlexStyles {
     readonly gap: DimensionValue
     readonly rowGap: DimensionValue
     readonly columnGap: DimensionValue
@@ -53,6 +56,16 @@ export interface MarginStyles {
     readonly marginLeft: DimensionValue
 }
 
+export interface PositionStyles {
+    readonly position: Position
+    readonly horizontal: DimensionValue
+    readonly vecrical: DimensionValue
+    readonly top: DimensionValue
+    readonly right: DimensionValue
+    readonly bottom: DimensionValue
+    readonly left: DimensionValue
+}
+
 export interface DimensionStyles {
     readonly width: DimensionValue
     readonly height: DimensionValue
@@ -61,14 +74,6 @@ export interface DimensionStyles {
     readonly minWidth: DimensionValue
     readonly minHeight: DimensionValue
     readonly aspectRatio: number
-
-    readonly position: Position
-    readonly horizontal: DimensionValue
-    readonly vecrical: DimensionValue
-    readonly top: DimensionValue
-    readonly right: DimensionValue
-    readonly bottom: DimensionValue
-    readonly left: DimensionValue
 }
 
 export interface TextTransformStyles {
