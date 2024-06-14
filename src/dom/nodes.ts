@@ -5,6 +5,8 @@ import {
 import { GeneralElementStyles, TermueElementName, TermueNodeName, YogaNode } from "./shared"
 import { TermueDOMNode } from "./nodes/TermueDOMNode"
 import { TermueDOMElement } from "./elements/TermueDOMElement"
+import { TermueCommentDOMNode } from "./nodes/TermueCommentDOMNode"
+import { TermueTextDOMNode } from "./nodes/TermueTextDOMNode"
 
 export type BoxElementStyles = Partial<
     GeneralElementStyles
@@ -15,23 +17,6 @@ export type TextElementStyles = Partial<
     GeneralElementStyles
     & TextStyles
 >
-
-abstract class TermueDOMNodeWithStringValue extends TermueDOMNode {
-    public nodeValue: string
-
-    public constructor(value: string) {
-        super()
-        this.nodeValue = value
-    }
-}
-
-export class TermueTextDOMNode extends TermueDOMNodeWithStringValue {
-    public nodeName: "node:#text" = 'node:#text'
-}
-
-export class TermueCommentDOMNode extends TermueDOMNodeWithStringValue {
-    public nodeName: "node:#comment" = 'node:#comment'
-}
 
 export class TermueBoxDOMElement extends TermueDOMElement {
     public nodeName: "element:box" = 'element:box'
