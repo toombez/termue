@@ -36,6 +36,7 @@ export type FlexWrap =
     | 'wrap-reverse'
 
 export interface FlexStyles {
+    readonly overflow: Overflow
     readonly display: Display
     readonly gap: DimensionValue
     readonly rowGap: DimensionValue
@@ -62,7 +63,7 @@ export type Overflow =
     | 'scroll'
     | 'visible'
 
-export interface GeneralStyles {
+export interface DimensionStyles {
     readonly width: DimensionValue
     readonly height: DimensionValue
     readonly maxWidth: DimensionValue
@@ -70,9 +71,6 @@ export interface GeneralStyles {
     readonly minWidth: DimensionValue
     readonly minHeight: DimensionValue
     readonly aspectRatio: number
-
-    readonly color: string
-    readonly bgColor: string
 
     readonly padding: DimensionValue
     readonly paddingY: DimensionValue
@@ -97,9 +95,9 @@ export interface GeneralStyles {
     readonly right: DimensionValue
     readonly bottom: DimensionValue
     readonly left: DimensionValue
+}
 
-    readonly overflow: Overflow
-
+export interface TextTransformStyles {
     readonly underline: boolean
     readonly overline: boolean
     readonly italic: boolean
@@ -108,18 +106,26 @@ export interface GeneralStyles {
     readonly dim: boolean
 }
 
-export interface TextStyles extends GeneralStyles {
+export interface ColorStyles {
+    readonly color: string
+    readonly bgColor: string
+}
+
+export interface TextStyles {
     readonly wrap: boolean
     readonly truncate: boolean
 }
 
-export interface BoxStyles extends GeneralStyles {
-    readonly borderStyle: keyof Boxes
-    readonly borderColor: string
-    readonly border: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
+export type BorderStyle = keyof Boxes
 
-    readonly borderTop: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
-    readonly borderRight: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
-    readonly borderBottom: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
-    readonly borderLeft: `${BoxStyles['borderColor']} ${BoxStyles['borderStyle']}`
+export type BorderSide = `${BorderStyle} ${string}`
+
+export interface BorderStyles {
+    readonly borderStyle: BorderStyle
+    readonly borderColor: string
+    readonly border: BorderSide
+    readonly borderTop: BorderSide
+    readonly borderRight: BorderSide
+    readonly borderBottom: BorderSide
+    readonly borderLeft: BorderSide
 }
