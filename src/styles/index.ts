@@ -45,7 +45,7 @@ export interface PaddingStyles {
 
 export interface MarginStyles {
     readonly margin: DimensionValue
-    readonly marginVectical: DimensionValue
+    readonly marginVertical: DimensionValue
     readonly marginHorizontal: DimensionValue
     readonly marginTop: DimensionValue
     readonly marginRight: DimensionValue

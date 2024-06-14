@@ -1,7 +1,7 @@
 import { ForegroundColorName, foregroundColorNames } from 'chalk'
 import { BorderColor, BorderSide, BorderStyle, Color, HexColor, RGBColor } from './values'
 import { YogaNode } from '../dom'
-import { BorderStyles } from '.'
+import { BorderStyles, MarginStyles, PaddingStyles } from '.'
 import Yoga, { Edge } from 'yoga-layout'
 
 export function isHexColor(color: Color): color is HexColor {
@@ -97,4 +97,64 @@ export function applyBorderStylesToYoga(styles: Partial<BorderStyles>, node: Yog
     applyBorderSideToYoga(borderRight, Yoga.EDGE_RIGHT, node)
     applyBorderSideToYoga(borderBottom, Yoga.EDGE_BOTTOM, node)
     applyBorderSideToYoga(borderLeft, Yoga.EDGE_LEFT, node)
+}
+
+function applyPaddingToYogaEdge(padding: number | undefined, edge: Edge, node: YogaNode) {
+    if (padding === undefined) {
+        return
+    }
+
+    node.setPadding(edge, padding)
+}
+
+export function applyPaddingToYoga(styles: Partial<PaddingStyles>, node: YogaNode) {
+    const {
+        padding,
+        paddingVertical,
+        paddingHorizontal,
+        paddingTop,
+        paddingRight,
+        paddingBottom,
+        paddingLeft,
+    } = styles
+
+    applyPaddingToYogaEdge(padding, Yoga.EDGE_ALL, node)
+
+    applyPaddingToYogaEdge(paddingVertical, Yoga.EDGE_VERTICAL, node)
+    applyPaddingToYogaEdge(paddingHorizontal, Yoga.EDGE_HORIZONTAL, node)
+
+    applyPaddingToYogaEdge(paddingTop, Yoga.EDGE_TOP, node)
+    applyPaddingToYogaEdge(paddingRight, Yoga.EDGE_RIGHT, node)
+    applyPaddingToYogaEdge(paddingBottom, Yoga.EDGE_BOTTOM, node)
+    applyPaddingToYogaEdge(paddingLeft, Yoga.EDGE_LEFT, node)
+}
+
+function applyMarginToYogaEdge(margin: number | undefined, edge: Edge, node: YogaNode) {
+    if (margin === undefined) {
+        return
+    }
+
+    node.setMargin(edge, margin)
+}
+
+export function applyMarginToYoga(styles: Partial<MarginStyles>, node: YogaNode) {
+    const {
+        margin,
+        marginVertical,
+        marginHorizontal,
+        marginTop,
+        marginRight,
+        marginBottom,
+        marginLeft,
+    } = styles
+
+    applyMarginToYogaEdge(margin, Yoga.EDGE_ALL, node)
+
+    applyMarginToYogaEdge(marginVertical, Yoga.EDGE_VERTICAL, node)
+    applyMarginToYogaEdge(marginHorizontal, Yoga.EDGE_HORIZONTAL, node)
+
+    applyMarginToYogaEdge(marginTop, Yoga.EDGE_TOP, node)
+    applyMarginToYogaEdge(marginRight, Yoga.EDGE_RIGHT, node)
+    applyMarginToYogaEdge(marginBottom, Yoga.EDGE_BOTTOM, node)
+    applyMarginToYogaEdge(marginLeft, Yoga.EDGE_LEFT, node)
 }
