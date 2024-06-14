@@ -1,39 +1,17 @@
-import { Boxes } from "cli-boxes"
-
-export type DimensionValue = number
-
-export type Display =
-    'flex'
-    | 'none'
-
-export type JustifyContent =
-    'center'
-    | 'flex-end'
-    | 'flex-start'
-    | 'flex-around'
-    | 'space-around'
-    | 'space-between'
-    | 'space-evenly'
-
-export type AlignItems =
-    JustifyContent
-    | 'baseline'
-    | 'stretch'
-
-export type AlignSelf = AlignItems
-
-export type AlignContent = AlignItems
-
-export type FlexDirection =
-    'row'
-    | 'column'
-    | 'row-reverse'
-    | 'column-reverse'
-
-export type FlexWrap =
-    'wrap'
-    | 'no-wrap'
-    | 'wrap-reverse'
+import { BorderStyle } from "../render"
+import type {
+    AlignContent,
+    AlignItems,
+    AlignSelf,
+    BorderSide,
+    DimensionValue,
+    Display,
+    FlexDirection,
+    FlexWrap,
+    JustifyContent,
+    Overflow,
+    Position
+} from "./values"
 
 export interface FlexStyles {
     readonly overflow: Overflow
@@ -52,16 +30,6 @@ export interface FlexStyles {
     readonly flexGrow: DimensionValue
     readonly flexShrink: DimensionValue
 }
-
-export type Position =
-    'relative'
-    | 'static'
-    | 'absolute'
-
-export type Overflow =
-    'hidden'
-    | 'scroll'
-    | 'visible'
 
 export interface DimensionStyles {
     readonly width: DimensionValue
@@ -115,10 +83,6 @@ export interface TextStyles {
     readonly wrap: boolean
     readonly truncate: boolean
 }
-
-export type BorderStyle = keyof Boxes
-
-export type BorderSide = `${BorderStyle} ${string}`
 
 export interface BorderStyles {
     readonly borderStyle: BorderStyle
