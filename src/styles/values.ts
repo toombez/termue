@@ -48,16 +48,17 @@ export type Overflow =
 
 export type BorderStyle = keyof Boxes
 
-export type BorderSide = `${BorderStyle} ${string}`
-
 export type HexColor = `#${string}`
 
 export type RGBColor = [number, number, number]
 
 export type Color = HexColor | RGBColor | ForegroundColorName
 
+export type BorderColor = HexColor | ForegroundColorName
+
+export type BorderSide = `${BorderStyle} ${BorderColor}` | 0
+
 export type BackgroundColor = Color
 
 export type TextColor = Color
 
-export type BorderColor = Color

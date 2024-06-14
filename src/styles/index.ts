@@ -90,8 +90,13 @@ export interface BorderStyles {
     readonly borderStyle: BorderStyle
     readonly borderColor: BorderColor
     readonly border: BorderSide
+    readonly borderHorizontal: BorderSide
+    readonly borderVertical: BorderSide
     readonly borderTop: BorderSide
     readonly borderRight: BorderSide
     readonly borderBottom: BorderSide
     readonly borderLeft: BorderSide
 }
+
+export * from './values'
+export * from './utils'
