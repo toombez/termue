@@ -54,4 +54,10 @@ export type HexColor = `#${string}`
 
 export type RGBColor = [number, number, number]
 
-export type Color = ForegroundColorName | HexColor | RGBColor
+export type Color = HexColor | RGBColor | ForegroundColorName
+
+export type BackgroundColor = Color
+
+export type TextColor = Color
+
+export type BorderColor = Color
