@@ -1,37 +1,9 @@
 import Yoga from "yoga-layout"
 import {
-    TERMUE_ELEMENTS_NAMES,
-    TERMUE_ELEMENTS_PREFIX,
-    TERMUE_NODES_NAMES,
-    TERMUE_NODE_PREFIX,
-} from './constants'
-import {
-    ExtractElementNames,
-    ExtractNodeNames,
-    ExtractTags,
-} from "./utils"
-import {
-    FlexStyles,
     TextStyles,
-    ColorStyles,
     BorderStyles,
-    DimensionStyles,
-    TextTransformStyles,
-    PaddingStyles,
-    MarginStyles,
-    DisplayStyles,
-    PositionStyles,
 } from "../styles"
-
-export type GeneralElementStyles =
-    FlexStyles
-    & TextTransformStyles
-    & ColorStyles
-    & DimensionStyles
-    & PaddingStyles
-    & MarginStyles
-    & DisplayStyles
-    & PositionStyles
+import { GeneralElementStyles, TermueElementName, TermueNodeName, YogaNode } from "./shared"
 
 export type BoxElementStyles = Partial<
     GeneralElementStyles
@@ -42,13 +14,6 @@ export type TextElementStyles = Partial<
     GeneralElementStyles
     & TextStyles
 >
-
-export type YogaNode = ReturnType<typeof Yoga.Node.create>
-export type YogaConfig = ReturnType<typeof Yoga.Config.create>
-
-export type TermueNodeName = ExtractNodeNames<typeof TERMUE_NODES_NAMES>
-export type TermueElementName = ExtractElementNames<typeof TERMUE_ELEMENTS_NAMES>
-export type Tag = ExtractTags<typeof TERMUE_ELEMENTS_NAMES>
 
 export type TermueDOMNodeWithParent<
     T extends TermueDOMNode
