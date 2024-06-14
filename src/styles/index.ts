@@ -2,6 +2,66 @@ import { Boxes } from "cli-boxes"
 
 export type DimensionValue = number
 
+export type Display =
+    'flex'
+    | 'none'
+
+export type JustifyContent =
+    'center'
+    | 'flex-end'
+    | 'flex-start'
+    | 'flex-around'
+    | 'space-around'
+    | 'space-between'
+    | 'space-evenly'
+
+export type AlignItems =
+    JustifyContent
+    | 'baseline'
+    | 'stretch'
+
+export type AlignSelf = AlignItems
+
+export type AlignContent = AlignItems
+
+export type FlexDirection =
+    'row'
+    | 'column'
+    | 'row-reverse'
+    | 'column-reverse'
+
+export type FlexWrap =
+    'wrap'
+    | 'no-wrap'
+    | 'wrap-reverse'
+
+export interface FlexStyles {
+    readonly display: Display
+    readonly gap: DimensionValue
+    readonly rowGap: DimensionValue
+    readonly columnGap: DimensionValue
+    readonly justifyContent: JustifyContent
+    readonly alignItems: AlignItems
+    readonly alignContent: AlignContent
+    readonly alignSelf: AlignSelf
+    readonly flexDirection: FlexDirection
+    readonly flexWrap: FlexWrap
+    readonly flex: number
+    readonly flexBasis: DimensionValue
+    readonly flexGrow: DimensionValue
+    readonly flexShrink: DimensionValue
+}
+
+export type Position =
+    'relative'
+    | 'static'
+    | 'absolute'
+
+export type Overflow =
+    'hidden'
+    | 'scroll'
+    | 'visible'
+
 export interface GeneralStyles {
     readonly width: DimensionValue
     readonly height: DimensionValue
@@ -30,7 +90,7 @@ export interface GeneralStyles {
     readonly marginBottom: DimensionValue
     readonly marginLeft: DimensionValue
 
-    readonly position: 'relative' | 'static' | 'absolute'
+    readonly position: Position
     readonly horizontal: DimensionValue
     readonly vecrical: DimensionValue
     readonly top: DimensionValue
@@ -38,37 +98,7 @@ export interface GeneralStyles {
     readonly bottom: DimensionValue
     readonly left: DimensionValue
 
-    readonly display: 'flex' | 'none'
-    readonly overflow: 'hidden' | 'scroll' | 'visible'
-
-    readonly gap: DimensionValue
-    readonly rowGap: DimensionValue
-    readonly columnGap: DimensionValue
-    readonly justifyContent:
-        'center'
-        | 'flex-end'
-        | 'flex-start'
-        | 'flex-around'
-        | 'space-around'
-        | 'space-between'
-        | 'space-evenly'
-    readonly alignItems:
-        'baseline'
-        | 'center'
-        | 'flex-end'
-        | 'flex-start'
-        | 'space-around'
-        | 'space-between'
-        | 'space-evenly'
-        | 'stretch'
-    readonly alignContent: GeneralStyles['alignItems']
-    readonly alignSelf: GeneralStyles['alignItems']
-    readonly flexDirection: 'row' | 'column' | 'row-reverse' | 'column-reverse'
-    readonly flexWrap: 'wrap' | 'no-wrap' | 'wrap-reverse'
-    readonly flex: number
-    readonly flexBasis: DimensionValue
-    readonly flexGrow: DimensionValue
-    readonly flexShrink: DimensionValue
+    readonly overflow: Overflow
 
     readonly underline: boolean
     readonly overline: boolean
