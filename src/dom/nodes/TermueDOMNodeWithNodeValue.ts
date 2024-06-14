@@ -1,6 +1,6 @@
-import { TermueDOMNode } from "./TermueDOMNode";
+import TermueDOMNode from "./TermueDOMNode"
 
-export default abstract class TermueDOMNODEWithNodeValue<T>
+export default abstract class TermueDOMNodeWithNodeValue<T>
 extends TermueDOMNode {
     public constructor(
         public nodeValue: T,

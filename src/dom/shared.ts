@@ -10,15 +10,13 @@ import {
     PositionStyles,
     TextTransformStyles
 } from "../styles"
-import {
-    TERMUE_ELEMENTS_NAMES,
-    TERMUE_NODES_NAMES
-} from './constants'
-import {
-    ExtractElementNames,
-    ExtractNodeNames,
-    ExtractTags
-} from './utils'
+import TermueDOMNode from './nodes/TermueDOMNode'
+import TermueCommentDOMNode from './nodes/TermueCommentDOMNode'
+import TermueTextDOMNode from './nodes/TermueTextDOMNode'
+import TermueDOMElement from './elements/TermueDOMElement'
+import TermueBoxDOMElement from './elements/TermueBoxDOMElement'
+import TermueTextDOMElement from './elements/TermueTextDOMElement'
+import TermueRootDOMElement from './elements/TermueRootDOMElement'
 
 export type GeneralElementStyles =
     FlexStyles
@@ -33,6 +31,13 @@ export type GeneralElementStyles =
 export type YogaNode = Node
 export type YogaConfig = Config
 
-export type TermueNodeName = ExtractNodeNames<typeof TERMUE_NODES_NAMES>
-export type TermueElementName = ExtractElementNames<typeof TERMUE_ELEMENTS_NAMES>
-export type Tag = ExtractTags<typeof TERMUE_ELEMENTS_NAMES>
+export type DOMNode =
+    TermueDOMNode
+    | TermueCommentDOMNode
+    | TermueTextDOMNode
+
+export type DOMElement =
+    TermueDOMElement
+    | TermueBoxDOMElement
+    | TermueTextDOMElement
+    | TermueRootDOMElement

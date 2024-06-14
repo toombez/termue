@@ -1,15 +1,15 @@
 import { TextStyles } from "../../styles"
 import { TERMUE_ELEMENT_NAME, TERMUE_NODE_NAME } from "../constants"
-import { TermueDOMNode } from "../nodes/TermueDOMNode"
+import TermueDOMNode from "../nodes/TermueDOMNode"
 import { GeneralElementStyles } from "../shared"
-import { TermueDOMElement } from "./TermueDOMElement"
+import TermueDOMElement from "./TermueDOMElement"
 
 export type TextElementStyles = Partial<
     GeneralElementStyles
     & TextStyles
 >
 
-export class TermueTextDOMElement extends TermueDOMElement {
+export default class TermueTextDOMElement extends TermueDOMElement {
     public readonly nodeName = TERMUE_ELEMENT_NAME.TEXT
     protected _styles: TextElementStyles = {}
 

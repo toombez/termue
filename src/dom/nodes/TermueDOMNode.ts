@@ -1,5 +1,5 @@
 import { TermueDOMName } from "../constants"
-import { TermueDOMElement } from "../elements/TermueDOMElement"
+import TermueDOMElement from "../elements/TermueDOMElement"
 
 export type TermueDOMNodeWithParent<
     T extends TermueDOMNode
@@ -8,7 +8,7 @@ export type TermueDOMNodeWithParent<
         parentNode: TermueDOMElement
     }
 
-export abstract class TermueDOMNode {
+export default abstract class TermueDOMNode {
     public abstract readonly nodeName: TermueDOMName
     protected _parentNode: TermueDOMElement | null = null
 

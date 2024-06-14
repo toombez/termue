@@ -1,6 +1,7 @@
 import { TERMUE_NODE_NAME } from "../constants"
-import TermueDOMNODEWithNodeValue from "./TermueDOMNodeWithNodeValue"
+import TermueDOMNodeWithNodeValue from "./TermueDOMNodeWithNodeValue"
 
-export class TermueTextDOMNode extends TermueDOMNODEWithNodeValue<string> {
+export default class TermueTextDOMNode
+extends TermueDOMNodeWithNodeValue<string> {
     public readonly nodeName = TERMUE_NODE_NAME.TEXT
 }
