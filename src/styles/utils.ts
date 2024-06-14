@@ -3,7 +3,7 @@
 import { ForegroundColorName, foregroundColorNames } from 'chalk'
 import { BorderColor, BorderSide, BorderStyle, Color, HexColor, RGBColor } from './values'
 import { YogaNode } from '../dom'
-import { BorderStyles, DisplayStyles, FlexStyles, MarginStyles, PaddingStyles, PositionStyles } from '.'
+import { BorderStyles, DimensionStyles, DisplayStyles, FlexStyles, MarginStyles, PaddingStyles, PositionStyles } from '.'
 import Yoga, { Display, Edge, Overflow, PositionType } from 'yoga-layout'
 
 export function isHexColor(color: Color): color is HexColor {
@@ -381,6 +381,46 @@ export function applyFlexStyles(styles: Partial<FlexStyles>, node: YogaNode) {
     }
 }
 
+export function applyDimensionStyles(styles: Partial<DimensionStyles>, node: YogaNode) {
+    const {
+        width,
+        maxWidth,
+        minWidth,
+        height,
+        maxHeight,
+        minHeight,
+        aspectRatio,
+    } = styles
+
+    if (width !== undefined) {
+        node.setWidth(width)
+    }
+
+    if (maxWidth !== undefined) {
+        node.setMaxWidth(maxWidth)
+    }
+
+    if (minWidth !== undefined) {
+        node.setMinWidth(minWidth)
+    }
+
+    if (height !== undefined) {
+        node.setHeight(height)
+    }
+
+    if (maxHeight !== undefined) {
+        node.setMaxHeight(maxHeight)
+    }
+
+    if (minHeight !== undefined) {
+        node.setMinHeight(minHeight)
+    }
+
+    if (aspectRatio !== undefined) {
+        node.setAspectRatio(aspectRatio)
+    }
+}
+
 type ApplyStylesToYogaStyles = Partial<
     BorderStyles
     & MarginStyles
@@ -388,6 +428,7 @@ type ApplyStylesToYogaStyles = Partial<
     & DisplayStyles
     & PositionStyles
     & FlexStyles
+    & DimensionStyles
 >
 
 export function applyStylesToYoga(styles: ApplyStylesToYogaStyles, node: YogaNode) {
@@ -395,7 +436,7 @@ export function applyStylesToYoga(styles: ApplyStylesToYogaStyles, node: YogaNod
     applyPaddingToYoga(styles, node)
     applyMarginToYoga(styles, node)
     applyFlexStyles(styles, node)
-
+    applyDimensionStyles(styles, node)
     applyDisplayStyles(styles, node)
     applyBorderStylesToYoga(styles, node)
 }
