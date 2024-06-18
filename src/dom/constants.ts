@@ -1,6 +1,13 @@
+import type {
+    AddStringPrefix,
+    CamelCaseToSnakeCase,
+    GetStringArrayValues,
+} from "../utilityTypes"
+import { addStringPrefix, convertToConstant } from "../utils"
+
 const RAW_TERMUE_NODE_NAMES = [
     'text',
-    'comment'
+    'comment',
 ] as const
 
 const RAW_TERMUE_ELEMENT_NAMES = [
@@ -8,17 +15,6 @@ const RAW_TERMUE_ELEMENT_NAMES = [
     'box',
     'root',
 ] as const
-
-export const TERMUE_NODE_NAME: TERMUE_NODE_NAME_CONSTANT = {
-    COMMENT: 'node:#comment',
-    TEXT: 'node:#text',
-} as const
-
-export const TERMUE_ELEMENT_NAME: TERMUE_ELEMENT_NAME_CONSTANT = {
-    BOX: 'element:box',
-    ROOT: 'element:root',
-    TEXT: 'element:text',
-} as const
 
 // ============================================================================
 // Internal logic
@@ -42,23 +38,45 @@ export const TERMUE_NODE_PREFIX =
 export const TERMUE_ELEMENT_PREFIX =
     `element${TERMUE_PREFIX_NAME_SEPARATOR}` as const
 
-type AddStringPrefix<
-    T extends string,
-    K extends string,
-> = `${T}${K}`
-
 type GetNamesConstant<
     Prefix extends Readonly<string>,
     Names extends Readonly<string>,
 > = {
-    [Name in Uppercase<Names>]: AddStringPrefix<
+    [Name in Uppercase<CamelCaseToSnakeCase<Names>>]: AddStringPrefix<
         Prefix,
         Lowercase<Name>
     >
 }
 
-type RawTermueNodeName = typeof RAW_TERMUE_NODE_NAMES[number]
-type RawTermueElementName = typeof RAW_TERMUE_ELEMENT_NAMES[number]
+export const TERMUE_NODE_NAME = RAW_TERMUE_NODE_NAMES
+    .reduce((constants, value) => {
+        const convertedKey = convertToConstant(value)
+        const convertedValue = addStringPrefix(TERMUE_NODE_PREFIX, value)
+
+        return {
+            ...constants,
+            [convertedKey]: convertedValue,
+        }
+    }, {}) as TERMUE_NODE_NAME_CONSTANT
+
+export const TERMUE_ELEMENT_NAME = RAW_TERMUE_ELEMENT_NAMES
+    .reduce((constants, value) => {
+        const convertedKey = convertToConstant(value)
+        const convertedValue = addStringPrefix(TERMUE_ELEMENT_PREFIX, value)
+
+        return {
+            ...constants,
+            [convertedKey]: convertedValue,
+        }
+    }, {}) as TERMUE_ELEMENT_NAME_CONSTANT
+
+type RawTermueNodeName = GetStringArrayValues<
+    typeof RAW_TERMUE_NODE_NAMES
+>
+
+type RawTermueElementName = GetStringArrayValues<
+    typeof RAW_TERMUE_ELEMENT_NAMES
+>
 
 type TERMUE_NODE_NAME_CONSTANT = GetNamesConstant<
     typeof TERMUE_NODE_PREFIX,
