@@ -1,3 +1,8 @@
+import type {
+    AddStringPrefix,
+    GetStringArrayValues
+} from "../utilityTypes"
+
 const RAW_TERMUE_NODE_NAMES = [
     'text',
     'comment'
@@ -42,11 +47,6 @@ export const TERMUE_NODE_PREFIX =
 export const TERMUE_ELEMENT_PREFIX =
     `element${TERMUE_PREFIX_NAME_SEPARATOR}` as const
 
-type AddStringPrefix<
-    T extends string,
-    K extends string,
-> = `${T}${K}`
-
 type GetNamesConstant<
     Prefix extends Readonly<string>,
     Names extends Readonly<string>,
@@ -57,8 +57,13 @@ type GetNamesConstant<
     >
 }
 
-type RawTermueNodeName = typeof RAW_TERMUE_NODE_NAMES[number]
-type RawTermueElementName = typeof RAW_TERMUE_ELEMENT_NAMES[number]
+type RawTermueNodeName = GetStringArrayValues<
+    typeof RAW_TERMUE_NODE_NAMES
+>
+
+type RawTermueElementName = GetStringArrayValues<
+    typeof RAW_TERMUE_ELEMENT_NAMES
+>
 
 type TERMUE_NODE_NAME_CONSTANT = GetNamesConstant<
     typeof TERMUE_NODE_PREFIX,
