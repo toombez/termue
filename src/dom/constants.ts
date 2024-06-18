@@ -1,6 +1,7 @@
 import type {
     AddStringPrefix,
-    GetStringArrayValues
+    CamelCaseToSnakeCase,
+    GetStringArrayValues,
 } from "../utilityTypes"
 
 const RAW_TERMUE_NODE_NAMES = [
@@ -51,7 +52,7 @@ type GetNamesConstant<
     Prefix extends Readonly<string>,
     Names extends Readonly<string>,
 > = {
-    [Name in Uppercase<Names>]: AddStringPrefix<
+    [Name in Uppercase<CamelCaseToSnakeCase<Names>>]: AddStringPrefix<
         Prefix,
         Lowercase<Name>
     >
