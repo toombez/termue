@@ -3,10 +3,11 @@ import type {
     CamelCaseToSnakeCase,
     GetStringArrayValues,
 } from "../utilityTypes"
+import { addStringPrefix, convertToConstant } from "../utils"
 
 const RAW_TERMUE_NODE_NAMES = [
     'text',
-    'comment'
+    'comment',
 ] as const
 
 const RAW_TERMUE_ELEMENT_NAMES = [
@@ -14,17 +15,6 @@ const RAW_TERMUE_ELEMENT_NAMES = [
     'box',
     'root',
 ] as const
-
-export const TERMUE_NODE_NAME: TERMUE_NODE_NAME_CONSTANT = {
-    COMMENT: 'node:#comment',
-    TEXT: 'node:#text',
-} as const
-
-export const TERMUE_ELEMENT_NAME: TERMUE_ELEMENT_NAME_CONSTANT = {
-    BOX: 'element:box',
-    ROOT: 'element:root',
-    TEXT: 'element:text',
-} as const
 
 // ============================================================================
 // Internal logic
@@ -57,6 +47,28 @@ type GetNamesConstant<
         Lowercase<Name>
     >
 }
+
+export const TERMUE_NODE_NAME = RAW_TERMUE_NODE_NAMES
+    .reduce((constants, value) => {
+        const convertedKey = convertToConstant(value)
+        const convertedValue = addStringPrefix(TERMUE_NODE_PREFIX, value)
+
+        return {
+            ...constants,
+            [convertedKey]: convertedValue,
+        }
+    }, {}) as TERMUE_NODE_NAME_CONSTANT
+
+export const TERMUE_ELEMENT_NAME = RAW_TERMUE_ELEMENT_NAMES
+    .reduce((constants, value) => {
+        const convertedKey = convertToConstant(value)
+        const convertedValue = addStringPrefix(TERMUE_ELEMENT_PREFIX, value)
+
+        return {
+            ...constants,
+            [convertedKey]: convertedValue,
+        }
+    }, {}) as TERMUE_ELEMENT_NAME_CONSTANT
 
 type RawTermueNodeName = GetStringArrayValues<
     typeof RAW_TERMUE_NODE_NAMES
