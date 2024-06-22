@@ -3,13 +3,13 @@ export default abstract class StyleRule<
     ResultValue = RawValue,
     InternalValue = ResultValue,
 > {
-    protected internalValue: InternalValue | undefined
-    protected abstract parseInternal(value: InternalValue): ResultValue
-
     public abstract readonly name: string
 
-    public abstract parseRaw(value: RawValue): InternalValue
-    public abstract assertValue(value: RawValue): asserts value is RawValue
+    protected abstract parseInternal(value: InternalValue): ResultValue
+    protected abstract parseRaw(value: RawValue): InternalValue
+    protected abstract assertValue(value: RawValue): asserts value is RawValue
+
+    protected internalValue: InternalValue | undefined
 
     public constructor(value: RawValue | undefined = undefined) {
         this.value = value
@@ -43,4 +43,10 @@ export default abstract class StyleRule<
     } {
         return typeof this.internalValue !== 'undefined'
     }
+}
+
+export type PickRuleResult<R extends StyleRule> = R['value']
+
+export type PickRuleResultToRecord<R extends StyleRule> = {
+    [K in R as K['name']]: PickRuleResult<K>
 }
