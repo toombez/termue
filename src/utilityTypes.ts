@@ -47,3 +47,8 @@ export type CamelCaseToKebabCase<
         ? `${Uncapitalize<FirstWord>}${CamelCaseToKebabCase<Rest>}`
         : `${Uncapitalize<FirstWord>}-${CamelCaseToKebabCase<Rest>}`
     : '';
+
+export type UnionToIntersection<T> =
+    (T extends any ? (x: T) => any : never) extends (x: infer R) => any
+        ? R
+        : never
