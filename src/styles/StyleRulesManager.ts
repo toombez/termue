@@ -1,4 +1,4 @@
-import StyleRule, { FindRuleByName, PickRawValue } from "./StyleRule"
+import StyleRule, { FindRuleByName, PickRawValue, PickRuleResultToRecord } from "./StyleRule"
 
 export default class StyleRulesManager<Rules extends StyleRule> {
     public readonly rules: Map<Rules['name'], Rules> = new Map()
@@ -26,7 +26,7 @@ export default class StyleRulesManager<Rules extends StyleRule> {
     public getRuleValue<Name extends Rules['name']>(
         name: Name
     ): FindRuleByName<Rules, Name>['value'] | undefined {
-        return this.rules.get(name)
+        return this.rules.get(name)?.value
     }
 
     public removeRule<Name extends Rules['name']>(name: Name): typeof this {
@@ -40,5 +40,24 @@ export default class StyleRulesManager<Rules extends StyleRule> {
 
     public get size(): number {
         return this.rules.size
+    }
+
+    public computeStyles(styles: Record<string, unknown>): Partial<PickRuleResultToRecord<Rules>> {
+        const result: Record<string, unknown> = {}
+
+        for (let ruleName in styles) {
+            const rawValue = styles[ruleName]
+
+            if (!this.hasRule(ruleName)) {
+                continue
+            }
+
+            this.setRuleValue(ruleName, rawValue as any)
+            const value = this.getRuleValue(ruleName)
+
+            result[ruleName] = value
+        }
+
+        return result as Partial<PickRuleResultToRecord<Rules>>
     }
 }
