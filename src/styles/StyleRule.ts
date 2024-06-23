@@ -50,3 +50,18 @@ export type PickRuleResult<R extends StyleRule> = R['value']
 export type PickRuleResultToRecord<R extends StyleRule> = {
     [K in R as K['name']]: PickRuleResult<K>
 }
+
+export type PickInternalValue<
+    Rule extends StyleRule
+> = Rule extends StyleRule<infer _, infer __, infer I> ? I : never
+
+export type PickRawValue<
+    Rule extends StyleRule
+> = Rule extends StyleRule<infer R, infer _, infer __> ? R : never
+
+export type PickResultValue<
+    Rule extends StyleRule
+> = Rule extends StyleRule<infer _, infer R, infer __> ? R : never
+
+export type FindRuleByName<Rules extends StyleRule, Name extends Rules['name']> =
+    Extract<Rules, { name: Name }>
