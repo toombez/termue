@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun --watch run ./src/index.ts",
-    "test": "bun test --watch"
+    "test": "bun test --watch",
+    "coverage": "bun test --coverage"
   },
   "exports": {
     "import": "./src/index.ts"

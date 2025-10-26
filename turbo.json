@@ -5,6 +5,7 @@
     "build": {},
     "lint": {},
     "test": {},
+    "coverage": {},
     "dev": {
       "cache": false,
       "persistent": true
