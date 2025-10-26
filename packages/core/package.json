@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch run ./src/index.ts"
+    "dev": "bun --watch run ./src/index.ts",
+    "test": "bun test --watch"
   },
   "exports": {
     "import": "./src/index.ts"
