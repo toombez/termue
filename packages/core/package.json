@@ -15,6 +15,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@vue/runtime-core": "^3.5.22"
+    "@vue/runtime-core": "^3.5.22",
+    "yoga-layout": "^3.2.1"
   }
 }
