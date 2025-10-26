@@ -4,9 +4,9 @@ import VTermueNode from "./VTermueNode"
 import Yoga from "yoga-layout"
 import type { Node as YogaNode } from 'yoga-layout'
 
-export default abstract class VTermueElement extends VTermueNode {
+export default class VTermueElement extends VTermueNode {
     public children: Array<VTermueNode> = []
-    public override type: DomType = DOM_TYPE.ELEMENT
+    protected override _type: DomType = DOM_TYPE.ELEMENT
     public yogaNode: YogaNode = Yoga.Node.create()
 
     public constructor(
