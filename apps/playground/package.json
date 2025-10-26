@@ -1,0 +1,18 @@
+{
+  "name": "@termue/playground",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch run ./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "@termue/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
